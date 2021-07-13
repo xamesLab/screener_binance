@@ -1,5 +1,13 @@
+import "./main.css";
+import "./components/style.css";
+import Container from "./components/Container";
+
 function App() {
-  return <div className="App"></div>;
+  return (
+    <div className="app">
+      <Container />
+    </div>
+  );
 }
 
 export default App;

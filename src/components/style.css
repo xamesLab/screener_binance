@@ -1,0 +1,17 @@
+.container {
+    min-width: 80%;
+    min-height: 50%;
+    background-color: aliceblue;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem 2rem;
+}
+
+.chart {
+    padding: 0;
+}
+
+.chart>canvas {
+    border: 1px solid black;
+}
