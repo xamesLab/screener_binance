@@ -1,3 +1,4 @@
+import Binance from "binance-api-node";
 import { conf } from "./conf";
 
 const getCanvasContext = (canvas) => {
@@ -54,4 +55,23 @@ export const drawChart = (canvas, data) => {
   }
   ctx.stroke();
   ctx.closePath();
+
+  //console.log(getData());
+};
+
+export const getData = () => {
+  const client = Binance();
+  const data = [];
+  (async function p() {
+    const resp = await client.futuresCandles({
+      symbol: "BTCUSDT",
+      interval: "5m",
+      limit: 10,
+    });
+
+    resp.forEach((i) => {
+      data.push(i);
+    });
+  })();
+  return data;
 };
