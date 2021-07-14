@@ -9,27 +9,17 @@ const getCanvasContext = (canvas) => {
   return canvas.getContext("2d");
 };
 
-const getBoundaries = (data) => {
-  let min;
-  let max;
-
-  for (const [, y] of data) {
-    if (typeof min !== "number") min = y;
-    if (typeof max !== "number") max = y;
-
-    if (min > y) min = y;
-    if (max < y) max = y;
+const getBoundaries = ({ low, high }) => {
+  let min = low[0];
+  let max = high[0];
+  for (let i in low) {
+    if (min > low[i]) min = low[i];
+    if (max < high[i]) max = high[i];
   }
-
   return [min, max];
 };
 
-export const drawChart = (canvas, data) => {
-  const ctx = getCanvasContext(canvas);
-
-  const [yMin, yMax] = getBoundaries(data);
-  const yRatio = conf.VIEW_HEIGHT / (yMax - yMin);
-
+const drawChartField = (ctx, yMin, yMax) => {
   const step = conf.VIEW_HEIGHT / conf.ROWS_COUNT;
   const textStep = (yMax - yMin) / conf.ROWS_COUNT;
 
@@ -46,32 +36,68 @@ export const drawChart = (canvas, data) => {
   }
   ctx.stroke();
   ctx.closePath();
+};
+
+// const drawLine = (ctx) => {
+//   ctx.beginPath();
+//   ctx.lineWidth = 3;
+//   ctx.strokeStyle = "#ff0000";
+
+//   ctx.stroke();
+//   ctx.closePath();
+// };
+
+export const drawChart = (canvas, { colors, columns }) => {
+  const ctx = getCanvasContext(canvas);
+  const [yMin, yMax] = getBoundaries(columns);
+  drawChartField(ctx, yMin, yMax);
+
+  const yRatio = conf.VIEW_HEIGHT / (yMax - yMin);
 
   ctx.beginPath();
   ctx.lineWidth = 3;
-  ctx.strokeStyle = "#ff0000";
-  for (let [x, y] of data) {
-    ctx.lineTo(x, conf.DPI_HEIGHT - y * yRatio - conf.PADDING);
+  ctx.strokeStyle = "green";
+  for (let i in columns.high) {
+    let y = columns.high[i] - yMin;
+    ctx.lineTo(i * 10, conf.DPI_HEIGHT - y * yRatio - conf.PADDING);
+    console.log(+i * 10, conf.DPI_HEIGHT - y * yRatio - conf.PADDING);
   }
   ctx.stroke();
   ctx.closePath();
 
-  //console.log(getData());
+  ctx.beginPath();
+  ctx.lineWidth = 3;
+  ctx.strokeStyle = "#ff0000";
+  for (let i in columns.low) {
+    let y = columns.low[i] - yMin;
+    ctx.lineTo(i * 10, conf.DPI_HEIGHT - y * yRatio - conf.PADDING);
+    console.log(+i * 10, conf.DPI_HEIGHT - y * yRatio - conf.PADDING);
+  }
+  ctx.stroke();
+  ctx.closePath();
 };
 
-export const getData = () => {
+export async function getData() {
   const client = Binance();
-  const data = [];
-  (async function p() {
-    const resp = await client.futuresCandles({
-      symbol: "BTCUSDT",
-      interval: "5m",
-      limit: 10,
-    });
+  const data = {
+    colors: { low: "red", high: "green" },
+    columns: {
+      times: [],
+      low: [],
+      high: [],
+    },
+  };
 
-    resp.forEach((i) => {
-      data.push(i);
-    });
-  })();
+  const resp = await client.futuresCandles({
+    symbol: "BTCUSDT",
+    interval: "1h",
+    limit: 100,
+  });
+
+  resp.forEach((i) => {
+    data.columns.times.push(i.openTime);
+    data.columns.low.push(+i.low);
+    data.columns.high.push(+i.high);
+  });
   return data;
-};
+}
