@@ -1,4 +1,3 @@
-import Binance from "binance-api-node";
 import { conf } from "./conf";
 
 const getCanvasContext = (canvas) => {
@@ -38,14 +37,28 @@ const drawChartField = (ctx, yMin, yMax) => {
   ctx.closePath();
 };
 
-// const drawLine = (ctx) => {
-//   ctx.beginPath();
-//   ctx.lineWidth = 3;
-//   ctx.strokeStyle = "#ff0000";
+const drawLine = (ctx, coord, color) => {
+  ctx.beginPath();
+  ctx.lineWidth = 3;
+  ctx.strokeStyle = color;
 
-//   ctx.stroke();
-//   ctx.closePath();
-// };
+  coord.forEach((i) => {
+    let [x, y] = i;
+    ctx.lineTo(x, y);
+  });
+
+  ctx.stroke();
+  ctx.closePath();
+};
+
+const getCoord = (array, ratio, yMin) => {
+  const coord = [];
+  for (let i in array) {
+    let y = array[i] - yMin;
+    coord.push([i * 10, conf.DPI_HEIGHT - y * ratio - conf.PADDING]);
+  }
+  return coord;
+};
 
 export const drawChart = (canvas, { colors, columns }) => {
   const ctx = getCanvasContext(canvas);
@@ -54,50 +67,6 @@ export const drawChart = (canvas, { colors, columns }) => {
 
   const yRatio = conf.VIEW_HEIGHT / (yMax - yMin);
 
-  ctx.beginPath();
-  ctx.lineWidth = 3;
-  ctx.strokeStyle = "green";
-  for (let i in columns.high) {
-    let y = columns.high[i] - yMin;
-    ctx.lineTo(i * 10, conf.DPI_HEIGHT - y * yRatio - conf.PADDING);
-    console.log(+i * 10, conf.DPI_HEIGHT - y * yRatio - conf.PADDING);
-  }
-  ctx.stroke();
-  ctx.closePath();
-
-  ctx.beginPath();
-  ctx.lineWidth = 3;
-  ctx.strokeStyle = "#ff0000";
-  for (let i in columns.low) {
-    let y = columns.low[i] - yMin;
-    ctx.lineTo(i * 10, conf.DPI_HEIGHT - y * yRatio - conf.PADDING);
-    console.log(+i * 10, conf.DPI_HEIGHT - y * yRatio - conf.PADDING);
-  }
-  ctx.stroke();
-  ctx.closePath();
+  drawLine(ctx, getCoord(columns.high, yRatio, yMin), colors.high);
+  drawLine(ctx, getCoord(columns.low, yRatio, yMin), colors.low);
 };
-
-export async function getData() {
-  const client = Binance();
-  const data = {
-    colors: { low: "red", high: "green" },
-    columns: {
-      times: [],
-      low: [],
-      high: [],
-    },
-  };
-
-  const resp = await client.futuresCandles({
-    symbol: "BTCUSDT",
-    interval: "1h",
-    limit: 100,
-  });
-
-  resp.forEach((i) => {
-    data.columns.times.push(i.openTime);
-    data.columns.low.push(+i.low);
-    data.columns.high.push(+i.high);
-  });
-  return data;
-}

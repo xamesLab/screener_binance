@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react"
 import { conf } from "./conf"
-import { drawChart, getData } from "./utils"
+import { getData } from "./getData"
+import { drawChart} from "./utils"
 
 const Chart = () => {
     const ref = useRef()

@@ -1,5 +1,5 @@
 const WIDTH = 600;
-const HEIGHT = 200;
+const HEIGHT = 300;
 const PADDING = 40;
 
 export const conf = {
@@ -10,4 +10,8 @@ export const conf = {
   ROWS_COUNT: 5,
   PADDING: PADDING,
   VIEW_HEIGHT: HEIGHT * 2 - PADDING * 2,
+  colors: {
+    high: "green",
+    low: "red",
+  },
 };
