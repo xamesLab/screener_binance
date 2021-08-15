@@ -8,6 +8,22 @@ const getCanvasContext = (canvas) => {
   return canvas.getContext("2d");
 };
 
+const getContextX = (canvas) => {
+  canvas.width = conf.DPI_WIDTH;
+  canvas.height = 60;
+  canvas.style.width = `${conf.WIDTH}px`;
+  canvas.style.height = `30px`;
+  return canvas.getContext("2d");
+};
+
+const getContextY = (canvas) => {
+  canvas.width = 110;
+  canvas.height = conf.DPI_HEIGHT;
+  canvas.style.width = `55px`;
+  canvas.style.height = `${conf.HEIGHT}px`;
+  return canvas.getContext("2d");
+};
+
 const getBoundaries = ({ low, high }) => {
   let min = low[0];
   let max = high[0];
@@ -18,7 +34,30 @@ const getBoundaries = ({ low, high }) => {
   return [min, max];
 };
 
-const drawChartField = (ctx, yMin, yMax) => {
+const drawAxisX = (ctx, { times }) => {
+  const step = conf.DPI_WIDTH / times.length;
+
+  ctx.beginPath();
+  ctx.strokeStyle = "#777";
+  ctx.font = "normal 22px Helvetica, sans-serif";
+  ctx.fillStyle = "#777";
+  for (let i = 0; i < times.length; i++) {
+    const x = step * i;
+    let d = new Date(times[i]);
+    if (d.getMinutes() === 0 || d.getMinutes() === 30) {
+      const text = `${d.getHours()}:${
+        d.getMinutes() === 0 ? "00" : d.getMinutes()
+      }`;
+      ctx.fillText(text, x - 28, 35);
+      ctx.moveTo(x, 0);
+      ctx.lineTo(x, 10);
+    }
+  }
+  ctx.stroke();
+  ctx.closePath();
+};
+
+const drawAxisY = (ctx, yMin, yMax) => {
   const step = conf.VIEW_HEIGHT / conf.ROWS_COUNT;
   const textStep = (yMax - yMin) / conf.ROWS_COUNT;
 
@@ -29,9 +68,23 @@ const drawChartField = (ctx, yMin, yMax) => {
   for (let i = 0; i <= conf.ROWS_COUNT; i++) {
     const y = step * i;
     const text = yMax - textStep * i;
-    ctx.fillText(text, 1143, y + conf.PADDING + 5);
+    ctx.fillText(text.toFixed(2), 10, y + conf.PADDING + 5);
     ctx.moveTo(0, y + conf.PADDING);
-    ctx.lineTo(conf.DPI_WIDTH - 60, y + conf.PADDING);
+    ctx.lineTo(7, y + conf.PADDING);
+  }
+  ctx.stroke();
+  ctx.closePath();
+};
+
+const drawChartField = (ctx) => {
+  const step = conf.VIEW_HEIGHT / conf.ROWS_COUNT;
+
+  ctx.beginPath();
+  ctx.strokeStyle = "#777";
+  for (let i = 0; i <= conf.ROWS_COUNT; i++) {
+    const y = step * i;
+    ctx.moveTo(0, y + conf.PADDING);
+    ctx.lineTo(conf.DPI_WIDTH, y + conf.PADDING);
   }
   ctx.stroke();
   ctx.closePath();
@@ -53,8 +106,7 @@ const drawLine = (ctx, coord, color) => {
 
 const getCoord = (array, ratio, yMin) => {
   const coord = [];
-  const xRatio = (conf.DPI_WIDTH - 60) / array.length;
-  console.log(array.length, (conf.DPI_WIDTH - 60) / array.length);
+  const xRatio = conf.DPI_WIDTH / array.length;
   for (let i in array) {
     let y = array[i] - yMin;
     coord.push([i * xRatio, conf.DPI_HEIGHT - y * ratio - conf.PADDING]);
@@ -62,10 +114,14 @@ const getCoord = (array, ratio, yMin) => {
   return coord;
 };
 
-export const drawChart = (canvas, { colors, columns }) => {
+export const drawChart = (canvas, canvasY, canvasX, { colors, columns }) => {
   const ctx = getCanvasContext(canvas);
+  const ctxY = getContextY(canvasY);
+  const ctxX = getContextX(canvasX);
   const [yMin, yMax] = getBoundaries(columns);
-  drawChartField(ctx, yMin, yMax);
+  drawChartField(ctx);
+  drawAxisY(ctxY, yMin, yMax);
+  drawAxisX(ctxX, columns);
 
   const yRatio = conf.VIEW_HEIGHT / (yMax - yMin);
 

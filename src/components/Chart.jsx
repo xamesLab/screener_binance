@@ -1,23 +1,34 @@
 import { useEffect, useRef } from "react"
-import { conf } from "./conf"
 import { getData } from "./getData"
-import { drawChart} from "./utils"
+import { drawChart } from "./utils"
+import SettingsIcon from '@material-ui/icons/Settings';
 
 const Chart = () => {
     const ref = useRef()
+    const refY = useRef()
+    const refX = useRef()
 
     useEffect(() => {
         (async function drawChartOfData() {
         const data = await getData()
-        drawChart(ref.current, data)
+        drawChart(ref.current, refY.current, refX.current, data)
         })()
     }, [])
     
     return (
         <div className="chart">
             <canvas
-                style={{width: `${conf.DPI_WIDTH}px`, height: `${conf.DPI_HEIGHT}px`}}
-                ref={ref} id="field"></canvas>
+                className='chart__field'
+                ref={ref}></canvas>
+            <canvas
+                className='chart__axis_y'
+                ref={refY}></canvas>
+            <canvas
+                className='chart__axis_x'
+                ref={refX}></canvas>
+            <div className="chart__set">
+                <SettingsIcon style={{fontSize:'20px'}}/>
+            </div>
         </div>
     )
 }

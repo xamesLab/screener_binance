@@ -15,7 +15,7 @@ export async function getData() {
   const resp = await client.futuresCandles({
     symbol: "BTCUSDT",
     interval: "5m",
-    limit: 200,
+    limit: 100,
   });
 
   resp.forEach((i) => {

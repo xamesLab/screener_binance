@@ -10,8 +10,38 @@
 
 .chart {
     padding: 0;
+    display: grid;
+    grid-template-areas: "field y" "x set";
 }
 
-.chart>canvas {
+canvas {
     border: 1px solid black;
+}
+
+.chart__field {
+    grid-area: field;
+}
+
+.chart__axis_y {
+    grid-area: y;
+    border-left: none;
+}
+
+.chart__axis_x {
+    grid-area: x;
+    border-top: none;
+}
+
+.chart__set {
+    grid-area: set;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-bottom: 1px solid black;
+    border-right: 1px solid black;
+    cursor: pointer;
+}
+
+.chart__set:hover {
+    background-color: rgb(180, 180, 180);
 }

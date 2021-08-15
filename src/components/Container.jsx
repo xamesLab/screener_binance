@@ -3,7 +3,7 @@ import Chart from "./Chart"
 const Container = () => {
     return (
         <div className="container">
-            <Chart/>
+            <Chart />
         </div>
     )
 }
