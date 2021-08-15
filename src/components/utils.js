@@ -29,9 +29,9 @@ const drawChartField = (ctx, yMin, yMax) => {
   for (let i = 0; i <= conf.ROWS_COUNT; i++) {
     const y = step * i;
     const text = yMax - textStep * i;
-    ctx.fillText(text, 1160, y + conf.PADDING + 5);
+    ctx.fillText(text, 1143, y + conf.PADDING + 5);
     ctx.moveTo(0, y + conf.PADDING);
-    ctx.lineTo(conf.DPI_WIDTH - 50, y + conf.PADDING);
+    ctx.lineTo(conf.DPI_WIDTH - 60, y + conf.PADDING);
   }
   ctx.stroke();
   ctx.closePath();
@@ -53,9 +53,11 @@ const drawLine = (ctx, coord, color) => {
 
 const getCoord = (array, ratio, yMin) => {
   const coord = [];
+  const xRatio = (conf.DPI_WIDTH - 60) / array.length;
+  console.log(array.length, (conf.DPI_WIDTH - 60) / array.length);
   for (let i in array) {
     let y = array[i] - yMin;
-    coord.push([i * 10, conf.DPI_HEIGHT - y * ratio - conf.PADDING]);
+    coord.push([i * xRatio, conf.DPI_HEIGHT - y * ratio - conf.PADDING]);
   }
   return coord;
 };
