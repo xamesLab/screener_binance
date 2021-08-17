@@ -83,7 +83,7 @@ const drawChartField = (ctx) => {
   ctx.strokeStyle = "#777";
   for (let i = 0; i <= conf.ROWS_COUNT; i++) {
     const y = step * i;
-    ctx.moveTo(0, y + conf.PADDING);
+    ctx.moveTo(0, y + conf.PADDING + 0.5);
     ctx.lineTo(conf.DPI_WIDTH, y + conf.PADDING);
   }
   ctx.stroke();
@@ -127,4 +127,40 @@ export const drawChart = (canvas, canvasY, canvasX, { colors, columns }) => {
 
   drawLine(ctx, getCoord(columns.high, yRatio, yMin), colors.high);
   drawLine(ctx, getCoord(columns.low, yRatio, yMin), colors.low);
+};
+
+export const drawOverlay = (canvas) => {
+  const ctx = getCanvasContext(canvas);
+
+  const mousemove = (e) => {
+    ctx.beginPath();
+    ctx.clearRect(0, 0, conf.DPI_WIDTH, conf.DPI_HEIGHT);
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = "rgb(74, 0, 97)";
+
+    ctx.setLineDash([5, 10]);
+
+    ctx.moveTo(e.layerX * 2, 0);
+    ctx.lineTo(e.layerX * 2, conf.DPI_HEIGHT);
+
+    ctx.moveTo(-1, e.layerY * 2);
+    ctx.lineTo(conf.DPI_WIDTH, e.layerY * 2);
+
+    ctx.stroke();
+    ctx.closePath();
+  };
+
+  const mouseout = () => {
+    ctx.clearRect(0, 0, conf.DPI_WIDTH, conf.DPI_HEIGHT);
+  };
+
+  canvas.addEventListener("mousemove", mousemove);
+  canvas.addEventListener("mouseout", mouseout);
+
+  return {
+    destroy() {
+      canvas.removeEventListener("mousemove", mousemove);
+      canvas.removeEventListener("mouseout", mouseout);
+    },
+  };
 };
