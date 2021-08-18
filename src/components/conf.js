@@ -1,6 +1,6 @@
-const WIDTH = 600;
-const HEIGHT = 300;
-const PADDING = 40;
+const WIDTH = 400;
+const HEIGHT = 200;
+const PADDING = 20;
 
 export const conf = {
   WIDTH: WIDTH,
