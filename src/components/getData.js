@@ -1,7 +1,7 @@
 import Binance from "binance-api-node";
 import { conf } from "./conf";
 
-export async function getData(currency) {
+export async function getData(currency, limit) {
   const client = Binance();
   const data = {
     colors: { low: conf.colors.low, high: conf.colors.high },
@@ -15,7 +15,7 @@ export async function getData(currency) {
   const resp = await client.futuresCandles({
     symbol: `${currency}USDT`,
     interval: "5m",
-    limit: 200,
+    limit: limit,
   });
 
   resp.forEach((i) => {

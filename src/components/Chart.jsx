@@ -4,9 +4,12 @@ import { drawChart, drawOverlay } from "./utils"
 import SettingsIcon from '@material-ui/icons/Settings';
 import { conf } from "./conf";
 import { useState } from "react";
+import ChartModal from "./ChartModal";
 
 const Chart = ({ list }) => {
-    const [currency, index] = list
+    let [currency, setCurrency] = useState(list[0])
+    const [limit, setLimit] = useState(100)
+    const [activeChartModal, setactiveChartModal] = useState(false)
     const [data, setData] = useState({})
     const ref = useRef()
     const refY = useRef()
@@ -14,13 +17,15 @@ const Chart = ({ list }) => {
     const refOver = useRef()
 
     async function drawChartOfData() {
-        const obj =(await getData(currency));
+        const obj =(await getData(currency, limit));
         setData(obj)
+        console.log(obj.columns.low[0], currency)
     }
 
     useEffect(() => {
         drawChartOfData()
-    }, [])
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[])
 
     useEffect(() => {
         if (data.columns?.low) {
@@ -31,6 +36,12 @@ const Chart = ({ list }) => {
 
     return (
         <div className="chart">
+            <ChartModal
+                setActive={setactiveChartModal}
+                active={activeChartModal}
+                setCurrency={setCurrency}
+                setLimit={setLimit}
+                reqData={ drawChartOfData }/>
             <div className="chart__label">{ currency }</div>
             <div style={{position:'relative',width:`${conf.WIDTH}`,height:`${conf.HEIGHT}`}}>
                 {data.columns?.low
@@ -49,7 +60,7 @@ const Chart = ({ list }) => {
             <canvas
                 className='chart__axis_x'
                 ref={refX}></canvas>
-            <div className="chart__set">
+            <div className="chart__set" onClick={setactiveChartModal}>
                 <SettingsIcon style={{ fontSize: '20px' }} />
             </div>
         </div>

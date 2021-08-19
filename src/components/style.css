@@ -26,10 +26,36 @@
 }
 
 .chart {
-    padding: 10px;
     display: grid;
     grid-template-areas: "field y" "x set";
     position: relative;
+    margin: 1rem;
+}
+
+.modal_chart {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(35, 15, 54, 0.644);
+    z-index: 100;
+}
+
+.modal_chart__content {
+    width: 90%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 2rem;
+    background-color: rgb(255, 255, 255);
+}
+
+.modal_chart__btn {
+    padding: 0.2rem 1.5rem;
 }
 
 canvas {
