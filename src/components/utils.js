@@ -114,10 +114,17 @@ const getCoord = (array, ratio, yMin) => {
   return coord;
 };
 
-export const drawChart = (canvas, canvasY, canvasX, { colors, columns }) => {
+export const drawChart = (
+  canvas,
+  canvasY,
+  canvasX,
+  { colors, columns },
+  chartsType = "LINE"
+) => {
   const ctx = getCanvasContext(canvas);
   const ctxY = getContextY(canvasY);
   const ctxX = getContextX(canvasX);
+
   const [yMin, yMax] = getBoundaries(columns);
   drawChartField(ctx);
   drawAxisY(ctxY, yMin, yMax);
@@ -125,8 +132,10 @@ export const drawChart = (canvas, canvasY, canvasX, { colors, columns }) => {
 
   const yRatio = conf.VIEW_HEIGHT / (yMax - yMin);
 
-  drawLine(ctx, getCoord(columns.high, yRatio, yMin), colors.high);
-  drawLine(ctx, getCoord(columns.low, yRatio, yMin), colors.low);
+  if (chartsType === "LINE") {
+    drawLine(ctx, getCoord(columns.high, yRatio, yMin), colors.high);
+    drawLine(ctx, getCoord(columns.low, yRatio, yMin), colors.low);
+  }
 };
 
 export const drawOverlay = (canvas) => {

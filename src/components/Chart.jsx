@@ -9,6 +9,7 @@ import ChartModal from "./ChartModal";
 const Chart = ({ list }) => {
     let [currency, setCurrency] = useState(list[0])
     const [limit, setLimit] = useState(100)
+    const [timeFrame, setTimeFrame] = useState('5m')
     const [activeChartModal, setactiveChartModal] = useState(false)
     const [data, setData] = useState({})
     const ref = useRef()
@@ -17,9 +18,8 @@ const Chart = ({ list }) => {
     const refOver = useRef()
 
     async function drawChartOfData() {
-        const obj =(await getData(currency, limit));
+        const obj =(await getData(currency, timeFrame, limit));
         setData(obj)
-        console.log(obj.columns.low[0], currency)
     }
 
     useEffect(() => {
@@ -41,8 +41,9 @@ const Chart = ({ list }) => {
                 active={activeChartModal}
                 setCurrency={setCurrency}
                 setLimit={setLimit}
+                setTimeFrame={setTimeFrame}
                 reqData={ drawChartOfData }/>
-            <div className="chart__label">{ currency }</div>
+            <div className="chart__label">{currency}/USDT { timeFrame }</div>
             <div style={{position:'relative',width:`${conf.WIDTH}`,height:`${conf.HEIGHT}`}}>
                 {data.columns?.low
                     ?< canvas

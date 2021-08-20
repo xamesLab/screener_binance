@@ -16,6 +16,45 @@
     align-items: center;
     justify-content: flex-end;
     padding: 0 2rem;
+    color: azure;
+}
+
+.header__toggle_charts {
+    margin-right: 1.5rem;
+}
+
+.header__toggle_btn {
+    border: none;
+    width: 6rem;
+    margin-right: 5px;
+    padding: 0.1rem 0;
+    cursor: pointer;
+    color: rgba(255, 255, 255, 0.76);
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
+.active{
+    color: white;
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 0.2rem 0;
+    background-color: rgb(174, 0, 255);
+}
+
+.header__toggle_btn:hover {
+    border: none;
+    padding: 0.2rem 0;
+    color: white;
+    background-color:rgba(255, 255, 255, 0.651);
+}
+
+.active:hover {
+    background-color: rgb(174, 0, 255);
+}
+
+.header__label {
+    font-size: 1.2rem;
+    margin-right: 0.5rem;
 }
 
 .content {
@@ -52,6 +91,10 @@
     justify-content: space-between;
     padding: 1rem 2rem;
     background-color: rgb(255, 255, 255);
+}
+
+.modal_chart__input {
+    width: 40%;
 }
 
 .modal_chart__btn {

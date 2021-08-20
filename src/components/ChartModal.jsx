@@ -1,7 +1,9 @@
 import React, { useState } from "react"
 
-const ChartModal = ({ active, setActive, setCurrency, setLimit, reqData }) => {
-    const [selectValue, setSelectValue] = useState('')
+const ChartModal = ({ active, setActive, setCurrency, setLimit, setTimeFrame, reqData }) => {
+    const TF = ['1m', '3m', '5m', '15m', '30m', '1h', '2h', '4h', '6h', '8h', '12h', '1d', '3d', '1w', '1M']
+    const [selectCurrency, setSelectCurrency] = useState('')
+    const [selectTimeFrame, setSelectTimeFrame] = useState('')
     const [inputValue, setInputValue] = useState('')
 
     const closeModal = () => {
@@ -16,8 +18,13 @@ const ChartModal = ({ active, setActive, setCurrency, setLimit, reqData }) => {
         }
     }
 
+    const changeTimeFrame = (e) => {
+        setSelectTimeFrame(e.target.value)
+        setTimeFrame(e.target.value)
+    }
+
     const changeCurrency = (e) => {
-        setSelectValue(e.target.value)
+        setSelectCurrency(e.target.value)
         setCurrency(e.target.value)
     }
 
@@ -33,7 +40,15 @@ const ChartModal = ({ active, setActive, setCurrency, setLimit, reqData }) => {
                 className="modal_chart__content">
                 <input placeholder={'amount of data (<200)'} className='modal_chart__input' value={inputValue} onChange={changeLimit} />
                 <select
-                    value={selectValue}
+                    value={selectTimeFrame}
+                    onChange={changeTimeFrame}>
+                    <option disabled value="">TF</option>
+                    {TF.map(i => {
+                        return <option key={i} value={`${i}`}>{ i }</option>
+                    })}
+                </select>
+                <select
+                    value={selectCurrency}
                     onChange={changeCurrency}>
                     <option disabled value="">coin</option>
                     <option value="ADA">ADA</option>
