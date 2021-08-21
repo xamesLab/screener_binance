@@ -6,40 +6,42 @@ import Header from "./Header"
 
 const Container = () => {
     let [currency, setCurrency] = useState('BTC')
-    const [limit, setLimit] = useState(3)
+    const [settings, setSettings] = useState({limit:3})
     const [timeFrame, setTimeFrame] = useState('5m')
-    const [countChart, setCountChart] = useState(5)
+    const [countChart, setCountChart] = useState(2)
     const [chartsType, setChartsType] = useState('LINE')
     const [data, setData] = useState([])
-    const currencytList = ['BTC', 'ADA', 'ETH', 'LTC', 'DOT', 'XRP']
+    const currencyList = ['BTC', 'ADA', 'ETH', 'LTC', 'DOT', 'XRP']
     const chartList = []
 
+    // запрос к серверу и формирование списка данных (графиков)
     async function getNewData() {
-        let list = []
+        const list = []
         for (let i = 0; i < countChart; i++){
-            const obj = (await getData(currency, timeFrame, limit));
-            list.push(obj)
+            const obj = (await getData(currencyList[i], timeFrame, settings.limit));
+            list.push({sbl:currencyList[i], data:obj})
         }
         return list
     }
 
+    // запрос новых данных при изменении настроек графика
     useEffect(() => {
         getNewData().then((l) => setData(l))
-    }, [])
+    }, [settings])
+    
+    // useEffect(() => {
+    //     console.log(data, 'data')
+    // },[data])
 
     return (
         <div className="container">
             <Header setCount={setCountChart} setChartsType={setChartsType} chartsType={chartsType} />
-            <div className="content">
-                {data.map((v,i) =>
-                    <div key={i}>test</div>)}
-            </div>
-            {/* <div className="content">{chartList.length===0
+            <div className="content">{data.length===0
                 ? <div>none</div>
-                : chartList.map((v,i) =>
-                    <Chart key={i} list={[v, i]}/>
-                )}</div> */}
-            
+                : data.map((v,i) =>
+                    <Chart key={i} chart={v} settings={setSettings}/>
+                )}
+            </div>
         </div>
     ) 
 }

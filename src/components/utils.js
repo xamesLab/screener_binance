@@ -1,5 +1,6 @@
 import { conf } from "./conf";
 
+// инициализация канваса
 const getCanvasContext = (canvas) => {
   canvas.width = conf.DPI_WIDTH;
   canvas.height = conf.DPI_HEIGHT;
@@ -8,6 +9,7 @@ const getCanvasContext = (canvas) => {
   return canvas.getContext("2d");
 };
 
+// инициализация канваса
 const getContextX = (canvas) => {
   canvas.width = conf.DPI_WIDTH;
   canvas.height = 60;
@@ -16,6 +18,7 @@ const getContextX = (canvas) => {
   return canvas.getContext("2d");
 };
 
+// инициализация канваса
 const getContextY = (canvas) => {
   canvas.width = 110;
   canvas.height = conf.DPI_HEIGHT;
@@ -24,6 +27,7 @@ const getContextY = (canvas) => {
   return canvas.getContext("2d");
 };
 
+// определение границ графика по вертикали
 const getBoundaries = ({ low, high }) => {
   let min = low[0];
   let max = high[0];
@@ -34,6 +38,7 @@ const getBoundaries = ({ low, high }) => {
   return [min, max];
 };
 
+// отрисовка временной шкалы
 const drawAxisX = (ctx, { times }) => {
   const step = conf.DPI_WIDTH / times.length;
 
@@ -57,6 +62,7 @@ const drawAxisX = (ctx, { times }) => {
   ctx.closePath();
 };
 
+// отрисовка временной шкалы
 const drawAxisY = (ctx, yMin, yMax) => {
   const step = conf.VIEW_HEIGHT / conf.ROWS_COUNT;
   const textStep = (yMax - yMin) / conf.ROWS_COUNT;
@@ -76,6 +82,7 @@ const drawAxisY = (ctx, yMin, yMax) => {
   ctx.closePath();
 };
 
+// отрисовка поля графика
 const drawChartField = (ctx) => {
   const step = conf.VIEW_HEIGHT / conf.ROWS_COUNT;
 
@@ -90,6 +97,7 @@ const drawChartField = (ctx) => {
   ctx.closePath();
 };
 
+// отрисовка линии по координатам с определенным цветом
 const drawLine = (ctx, coord, color) => {
   ctx.beginPath();
   ctx.lineWidth = 3;
@@ -104,9 +112,12 @@ const drawLine = (ctx, coord, color) => {
   ctx.closePath();
 };
 
+// координаты по принятым данным
 const getCoord = (array, ratio, yMin) => {
   const coord = [];
+  // шаг координат
   const xRatio = conf.DPI_WIDTH / array.length;
+
   for (let i in array) {
     let y = array[i] - yMin;
     coord.push([i * xRatio, conf.DPI_HEIGHT - y * ratio - conf.PADDING]);
@@ -114,6 +125,7 @@ const getCoord = (array, ratio, yMin) => {
   return coord;
 };
 
+// финальная отрисовка графика
 export const drawChart = (
   canvas,
   canvasY,
@@ -132,12 +144,14 @@ export const drawChart = (
 
   const yRatio = conf.VIEW_HEIGHT / (yMax - yMin);
 
+  // линейный график
   if (chartsType === "LINE") {
     drawLine(ctx, getCoord(columns.high, yRatio, yMin), colors.high);
     drawLine(ctx, getCoord(columns.low, yRatio, yMin), colors.low);
   }
 };
 
+// верхний слой для интерактивности
 export const drawOverlay = (canvas) => {
   const ctx = getCanvasContext(canvas);
 

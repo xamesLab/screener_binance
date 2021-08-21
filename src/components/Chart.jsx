@@ -6,33 +6,20 @@ import { conf } from "./conf";
 import { useState } from "react";
 import ChartModal from "./ChartModal";
 
-const Chart = ({ list }) => {
-    let [currency, setCurrency] = useState(list[0])
-    const [limit, setLimit] = useState(100)
+const Chart = ({chart, settings}) => {
+    let [currency, setCurrency] = useState([])
     const [timeFrame, setTimeFrame] = useState('5m')
     const [activeChartModal, setactiveChartModal] = useState(false)
-    const [data, setData] = useState({})
     const ref = useRef()
     const refY = useRef()
     const refX = useRef()
     const refOver = useRef()
 
-    async function drawChartOfData() {
-        const obj =(await getData(currency, timeFrame, limit));
-        setData(obj)
-    }
-
+    // отрисовка графика
     useEffect(() => {
-        drawChartOfData()
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    },[])
-
-    useEffect(() => {
-        if (data.columns?.low) {
-            drawChart(ref.current, refY.current, refX.current, data);
-            drawOverlay(refOver.current)
-        }
-    },[data])
+        drawChart(ref.current, refY.current, refX.current, chart.data);
+        drawOverlay(refOver.current)
+    }, [chart])
 
     return (
         <div className="chart">
@@ -40,27 +27,18 @@ const Chart = ({ list }) => {
                 setActive={setactiveChartModal}
                 active={activeChartModal}
                 setCurrency={setCurrency}
-                setLimit={setLimit}
-                setTimeFrame={setTimeFrame}
-                reqData={ drawChartOfData }/>
-            <div className="chart__label">{currency}/USDT { timeFrame }</div>
+                setSettings={settings}
+                setTimeFrame={setTimeFrame} />
+            <div className="chart__label">{chart.sbl}/USDT { timeFrame }</div>
             <div style={{position:'relative',width:`${conf.WIDTH}`,height:`${conf.HEIGHT}`}}>
-                {data.columns?.low
-                    ?< canvas
-                    className='chart__field'
-                        ref={ref} />
-                    :''}
-                <canvas
-                    className='chart__field_overlay'
-                    ref={refOver}/>
+                {chart.data.columns?.low
+                    ? <canvas className='chart__field' ref={ref} />
+                    : ''}
+                <canvas className='chart__field_overlay' ref={refOver}/>
             </div>
             
-            <canvas
-                className='chart__axis_y'
-                ref={refY}></canvas>
-            <canvas
-                className='chart__axis_x'
-                ref={refX}></canvas>
+            <canvas className='chart__axis_y' ref={refY}/>
+            <canvas className='chart__axis_x' ref={refX}/>
             <div className="chart__set" onClick={setactiveChartModal}>
                 <SettingsIcon style={{ fontSize: '20px' }} />
             </div>
