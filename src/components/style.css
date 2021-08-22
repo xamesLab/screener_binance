@@ -57,6 +57,26 @@
     margin-right: 0.5rem;
 }
 
+.loading__circle {
+    height: 5rem;
+    width: 5rem;
+    margin-top: 5rem;
+    border: 0.5rem solid rgb(74, 0, 97, 0.2);
+    border-top: 0.5rem solid rgba(74, 0, 97);
+    border-radius: 50%;
+    animation: loading 2s infinite linear;
+}
+
+@keyframes loading {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
 .content {
     display: flex;
     flex-wrap: wrap;

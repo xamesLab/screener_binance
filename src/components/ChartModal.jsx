@@ -1,10 +1,10 @@
 import React, { useState } from "react"
 
-const ChartModal = ({ active, setActive, setCurrency, setSettings, setTimeFrame }) => {
+const ChartModal = ({ active, setActive, setSettings, chart }) => {
     const TF = ['1m', '3m', '5m', '15m', '30m', '1h', '2h', '4h', '6h', '8h', '12h', '1d', '3d', '1w', '1M']
-    const [selectCurrency, setSelectCurrency] = useState('')
-    const [selectTimeFrame, setSelectTimeFrame] = useState('')
-    const [inputValue, setInputValue] = useState('')
+    const [selectCurrency, setSelectCurrency] = useState(chart.sbl)
+    const [selectTimeFrame, setSelectTimeFrame] = useState(chart.timeFrame)
+    const [inputValue, setInputValue] = useState(chart.limit)
 
     // закрытие модалки
     const closeModal = () => {
@@ -22,22 +22,21 @@ const ChartModal = ({ active, setActive, setCurrency, setSettings, setTimeFrame 
     // установка таймфрейма
     const changeTimeFrame = (e) => {
         setSelectTimeFrame(e.target.value)
-        setTimeFrame(e.target.value)
     }
 
     // установка валюты
     const changeCurrency = (e) => {
         setSelectCurrency(e.target.value)
-        setCurrency(e.target.value)
     }
 
     // запрос данных по новым настройкам
     const requestData = () => {
         const set = {};
-        if (inputValue !== '') {
-            set.limit = inputValue;
-            setSettings(set)
-        };
+        set.id = chart.id
+        set.limit = inputValue;
+        set.tF = selectTimeFrame
+        set.coin = selectCurrency
+        setSettings(set)
         closeModal();
     }
     
