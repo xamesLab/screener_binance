@@ -87,6 +87,7 @@ const drawChartField = (ctx) => {
   const step = conf.VIEW_HEIGHT / conf.ROWS_COUNT;
 
   ctx.beginPath();
+  ctx.lineWidth = 1;
   ctx.strokeStyle = "#777";
   for (let i = 0; i <= conf.ROWS_COUNT; i++) {
     const y = step * i;
@@ -125,17 +126,26 @@ const getCoord = (array, ratio, yMin) => {
   return coord;
 };
 
-// финальная отрисовка графика
-export const drawChart = (
-  canvas,
-  canvasY,
-  canvasX,
-  { colors, columns },
-  chartsType = "LINE"
-) => {
+export const canvasInit = (canvas, canvasY, canvasX) => {
   const ctx = getCanvasContext(canvas);
   const ctxY = getContextY(canvasY);
   const ctxX = getContextX(canvasX);
+  return [ctx, ctxY, ctxX];
+};
+
+// финальная отрисовка графика
+export const drawChart = (
+  ctxArray,
+  { columns, colors },
+  chartsType = "LINE"
+) => {
+  const ctx = ctxArray[0];
+  const ctxY = ctxArray[1];
+  const ctxX = ctxArray[2];
+
+  ctx.clearRect(0, 0, conf.DPI_WIDTH, conf.DPI_HEIGHT);
+  ctxY.clearRect(0, 0, conf.DPI_WIDTH, conf.DPI_HEIGHT);
+  ctxX.clearRect(0, 0, conf.DPI_WIDTH, conf.DPI_HEIGHT);
 
   const [yMin, yMax] = getBoundaries(columns);
   drawChartField(ctx);
@@ -148,6 +158,7 @@ export const drawChart = (
   if (chartsType === "LINE") {
     drawLine(ctx, getCoord(columns.high, yRatio, yMin), colors.high);
     drawLine(ctx, getCoord(columns.low, yRatio, yMin), colors.low);
+  } else {
   }
 };
 

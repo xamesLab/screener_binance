@@ -1,10 +1,10 @@
 import React, { useState } from "react"
 
-const ChartModal = ({ active, setActive, setSettings, chart }) => {
+const ChartModal = ({ active, setActive, chartSet, setSettings }) => {
     const TF = ['1m', '3m', '5m', '15m', '30m', '1h', '2h', '4h', '6h', '8h', '12h', '1d', '3d', '1w', '1M']
-    const [selectCurrency, setSelectCurrency] = useState(chart.sbl)
-    const [selectTimeFrame, setSelectTimeFrame] = useState(chart.timeFrame)
-    const [inputValue, setInputValue] = useState(chart.limit)
+    const [selectCurrency, setSelectCurrency] = useState(chartSet.coin)
+    const [selectTimeFrame, setSelectTimeFrame] = useState(chartSet.tF)
+    const [inputValue, setInputValue] = useState(chartSet.limit)
 
     // закрытие модалки
     const closeModal = () => {
@@ -32,7 +32,7 @@ const ChartModal = ({ active, setActive, setSettings, chart }) => {
     // запрос данных по новым настройкам
     const requestData = () => {
         const set = {};
-        set.id = chart.id
+        set.id = chartSet.id
         set.limit = inputValue;
         set.tF = selectTimeFrame
         set.coin = selectCurrency
