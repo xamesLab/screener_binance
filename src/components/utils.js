@@ -62,7 +62,7 @@ const drawAxisX = (ctx, { times }) => {
   ctx.closePath();
 };
 
-// отрисовка временной шкалы
+// отрисовка ценовой шкалы
 const drawAxisY = (ctx, yMin, yMax) => {
   const step = conf.VIEW_HEIGHT / conf.ROWS_COUNT;
   const textStep = (yMax - yMin) / conf.ROWS_COUNT;
@@ -152,9 +152,7 @@ const getCoord = (array, ratio, yMin) => {
   for (let i in array) {
     let y = array[i] - yMin;
     coord.push([i * xRatio, conf.DPI_HEIGHT - y * ratio - conf.PADDING]);
-    //console.log(conf.DPI_HEIGHT - y * ratio - conf.PADDING);
   }
-
   return coord;
 };
 
