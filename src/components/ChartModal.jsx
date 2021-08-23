@@ -7,9 +7,13 @@ const ChartModal = ({ active, setActive, chartSet, setSettings }) => {
     const [inputValue, setInputValue] = useState(chartSet.limit)
 
     // закрытие модалки
-    const closeModal = () => {
-        setActive(false)
-    }
+    const closeModal = () => setActive(false)
+
+    // установка таймфрейма
+    const changeTimeFrame = (e) => setSelectTimeFrame(e.target.value)
+
+    // установка валюты
+    const changeCurrency = (e) => setSelectCurrency(e.target.value)
 
     // установка объема данных
     const changeLimit = (e) => {
@@ -17,16 +21,6 @@ const ChartModal = ({ active, setActive, chartSet, setSettings }) => {
         if (!isNaN(num)&&num<=200) {
             setInputValue(num)
         }
-    }
-
-    // установка таймфрейма
-    const changeTimeFrame = (e) => {
-        setSelectTimeFrame(e.target.value)
-    }
-
-    // установка валюты
-    const changeCurrency = (e) => {
-        setSelectCurrency(e.target.value)
     }
 
     // запрос данных по новым настройкам
@@ -58,6 +52,8 @@ const ChartModal = ({ active, setActive, chartSet, setSettings }) => {
                     <option value="ETH">ETH</option>
                     <option value="LTC">LTC</option>
                     <option value="BTC">BTC</option>
+                    <option value="DOT">DOT</option>
+                    <option value="XRP">XRP</option>
                 </select>
                 <button className='modal_chart__btn' onClick={requestData}>req</button>
             </div>

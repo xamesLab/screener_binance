@@ -4,6 +4,7 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import { useState } from "react";
 import ChartModal from "./ChartModal";
 import { getData } from "./getData";
+import Loading from '../UI/Loading'
 
 const Chart = ({ chartSet, chartsType, setSettings }) => {
     const [activeChartModal, setactiveChartModal] = useState(false)
@@ -33,7 +34,6 @@ const Chart = ({ chartSet, chartsType, setSettings }) => {
     },[chartSet])
 
     // отрисовка графика
-
     useEffect(() => {
         if (data) {
             drawChart(ctxArr, data[1], chartsType)
@@ -42,7 +42,8 @@ const Chart = ({ chartSet, chartsType, setSettings }) => {
 
     return (
         <div className="chart">
-            <div className="chart__label">{chartSet.coin}/USDT {chartSet.tF} {chartSet.id}</div>
+            {!data?<div className="chart__load"><Loading/></div>:''}
+            <div className="chart__label">{chartSet.coin}/USDT {chartSet.tF} #{chartSet.id}</div>
             <ChartModal
                 setActive={setactiveChartModal}
                 active={activeChartModal}

@@ -57,10 +57,16 @@
     margin-right: 0.5rem;
 }
 
+.chart__load {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateY(-65%) translateX(-65%);
+}
+
 .loading__circle {
     height: 5rem;
     width: 5rem;
-    margin-top: 5rem;
     border: 0.5rem solid rgb(74, 0, 97, 0.2);
     border-top: 0.5rem solid rgba(74, 0, 97);
     border-radius: 50%;

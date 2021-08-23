@@ -10,6 +10,8 @@ export async function getData(currency, timeFrame, limit) {
       times: [],
       low: [],
       high: [],
+      open: [],
+      close: [],
     },
   };
 
@@ -25,6 +27,8 @@ export async function getData(currency, timeFrame, limit) {
     data.columns.times.push(i.openTime);
     data.columns.low.push(+i.low);
     data.columns.high.push(+i.high);
+    data.columns.open.push(+i.open);
+    data.columns.close.push(+i.close);
   });
   return data;
 }

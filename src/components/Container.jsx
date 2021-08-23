@@ -9,9 +9,11 @@ const Container = () => {
     const [countChart, setCountChart] = useState(2)
     const [chartsType, setChartsType] = useState('LINE')
 
+    // первичная инициализация (временно)
+    // зависимость количества графиков на странице от селектора
     useEffect(() => {
         const initCurrency = ['BTC', 'ADA', 'ETH', 'LTC', 'DOT', 'XRP'];
-        const initSet = { limit: 50, tF: '15m' };
+        const initSet = { limit: 10, tF: '15m' };
         const set = [];
         
         for (let i = 1; i <= countChart; i++) {
@@ -20,18 +22,12 @@ const Container = () => {
         setChartSeting(set);
     }, [countChart]);
     
+    // синхронизация с новыми настройками графика
     useEffect(() => {
         if (settings) {
             setChartSeting((prev) => {
-                return prev.map((i) => {
-                    if (settings.id === i.id) {
-                        return settings
-                    } else {
-                        return i
-                    };
-                });
+                return prev.map((i) => settings.id === i.id ? settings : i);
             });
-            console.log(settings)
         };
     }, [settings])
 

@@ -6,14 +6,14 @@ const Header = ({setCount, setChartsType, chartsType}) => {
     
 
     const chartLine = () => {
-        if (chartsType === 'BARS') {
+        if (chartsType === 'CANDLE') {
             setChartsType('LINE')
         }
     }
 
-    const chartBars = () => {
+    const chartCandles = () => {
         if (chartsType === 'LINE') {
-            setChartsType('BARS')
+            setChartsType('CANDLE')
         }
     }
 
@@ -21,7 +21,7 @@ const Header = ({setCount, setChartsType, chartsType}) => {
         <div className="header">
             <div className="header__toggle_charts">
                 <button onClick={chartLine} className={`header__toggle_btn ${chartsType==='LINE'?'active':''}`}>line</button>
-                <button onClick={chartBars} className={`header__toggle_btn ${chartsType==='BARS'?'active':''}`}>bars</button>
+                <button onClick={chartCandles} className={`header__toggle_btn ${chartsType==='CANDLE'?'active':''}`}>candles</button>
             </div>
             <p className="header__label">count of chart:</p>
             <select value={value} onChange={(e) => {

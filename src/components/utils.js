@@ -113,6 +113,36 @@ const drawLine = (ctx, coord, color) => {
   ctx.closePath();
 };
 
+// отрисовка свечей
+const drawCandles = (ctx, columns, colors, ratio, yMin) => {
+  const xRatio = conf.DPI_WIDTH / columns.open.length;
+
+  for (let i in columns.open) {
+    let yO = columns.open[i] - yMin;
+    let yC = columns.close[i] - yMin;
+    let yL = columns.low[i] - yMin;
+    let yH = columns.high[i] - yMin;
+    ctx.beginPath();
+    ctx.lineWidth = 9;
+
+    if (columns.open[i] > columns.close[i]) {
+      ctx.strokeStyle = colors.low;
+    } else {
+      ctx.strokeStyle = colors.high;
+    }
+    ctx.moveTo(xRatio * i, conf.DPI_HEIGHT - yO * ratio - conf.PADDING);
+    ctx.lineTo(xRatio * i, conf.DPI_HEIGHT - yC * ratio - conf.PADDING);
+    ctx.stroke();
+
+    ctx.lineWidth = 3;
+    ctx.moveTo(xRatio * i, conf.DPI_HEIGHT - yL * ratio - conf.PADDING);
+    ctx.lineTo(xRatio * i, conf.DPI_HEIGHT - yH * ratio - conf.PADDING);
+    ctx.stroke();
+  }
+
+  ctx.closePath();
+};
+
 // координаты по принятым данным
 const getCoord = (array, ratio, yMin) => {
   const coord = [];
@@ -122,7 +152,9 @@ const getCoord = (array, ratio, yMin) => {
   for (let i in array) {
     let y = array[i] - yMin;
     coord.push([i * xRatio, conf.DPI_HEIGHT - y * ratio - conf.PADDING]);
+    //console.log(conf.DPI_HEIGHT - y * ratio - conf.PADDING);
   }
+
   return coord;
 };
 
@@ -159,6 +191,8 @@ export const drawChart = (
     drawLine(ctx, getCoord(columns.high, yRatio, yMin), colors.high);
     drawLine(ctx, getCoord(columns.low, yRatio, yMin), colors.low);
   } else {
+    // свечной график
+    drawCandles(ctx, columns, colors, yRatio, yMin);
   }
 };
 
