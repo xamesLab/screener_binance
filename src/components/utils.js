@@ -40,7 +40,7 @@ const getBoundaries = ({ low, high }) => {
 
 // отрисовка временной шкалы
 const drawAxisX = (ctx, { times }) => {
-  const step = conf.DPI_WIDTH / times.length;
+  const step = conf.DPI_WIDTH / (times.length - 1);
 
   ctx.beginPath();
   ctx.strokeStyle = "#777";
@@ -147,7 +147,7 @@ const drawCandles = (ctx, columns, colors, ratio, yMin) => {
 const getCoord = (array, ratio, yMin) => {
   const coord = [];
   // шаг координат
-  const xRatio = conf.DPI_WIDTH / array.length;
+  const xRatio = conf.DPI_WIDTH / (array.length - 1);
 
   for (let i in array) {
     let y = array[i] - yMin;

@@ -5,8 +5,9 @@ import { useState } from "react";
 import ChartModal from "./ChartModal";
 import { getData } from "./getData";
 import Loading from '../UI/Loading'
+import CurrentPrice from "./CurrentPrice";
 
-const Chart = ({ chartSet, chartsType, setSettings }) => {
+const Chart = ({ socket, chartSet, chartsType, setSettings }) => {
     const [activeChartModal, setactiveChartModal] = useState(false)
     const [ctxArr, setCtxArr] = useState([])
     const [data, setData] = useState()
@@ -44,6 +45,7 @@ const Chart = ({ chartSet, chartsType, setSettings }) => {
         <div className="chart">
             {!data?<div className="chart__load"><Loading/></div>:''}
             <div className="chart__label">{chartSet.coin}/USDT {chartSet.tF} #{chartSet.id}</div>
+            <CurrentPrice socket={socket}/>
             <ChartModal
                 setActive={setactiveChartModal}
                 active={activeChartModal}
