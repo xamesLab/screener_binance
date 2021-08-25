@@ -11,11 +11,13 @@ const Chart = ({ socket, chartSet, chartsType, setSettings }) => {
     const [activeChartModal, setactiveChartModal] = useState(false)
     const [ctxArr, setCtxArr] = useState([])
     const [data, setData] = useState()
+    const [stream, setStream] = useState()
     const [currentSettings, setCurrentSettings] = useState()
     const ref = useRef()
     const refY = useRef()
     const refX = useRef()
     const refOver = useRef()
+    const [chartProps, setChartProps] = useState({})
 
     // инициализация канваса
     useEffect(() => {
@@ -32,12 +34,17 @@ const Chart = ({ socket, chartSet, chartsType, setSettings }) => {
                 setCurrentSettings(chartSet);
             });
         };
-    },[chartSet])
+    }, [chartSet])
+    
+    useEffect(() => {
+        if (socket && socket.stream === `${chartSet.coin.toLowerCase()}usdt@kline_${chartSet.tF}`)
+        {setStream(socket.data)}
+    }, [socket])
 
     // отрисовка графика
     useEffect(() => {
         if (data) {
-            drawChart(ctxArr, data[1], chartsType)
+            setChartProps(drawChart(ctxArr, data[1], chartsType))
         }
     },[data, ctxArr, chartsType])
 
@@ -45,7 +52,7 @@ const Chart = ({ socket, chartSet, chartsType, setSettings }) => {
         <div className="chart">
             {!data?<div className="chart__load"><Loading/></div>:''}
             <div className="chart__label">{chartSet.coin}/USDT {chartSet.tF} #{chartSet.id}</div>
-            <CurrentPrice socket={socket}/>
+            <CurrentPrice chartProps={chartProps} stream={stream}/>
             <ChartModal
                 setActive={setactiveChartModal}
                 active={activeChartModal}

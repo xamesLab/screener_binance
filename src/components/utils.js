@@ -192,6 +192,8 @@ export const drawChart = (
     // свечной график
     drawCandles(ctx, columns, colors, yRatio, yMin);
   }
+
+  return { ratio: yRatio, min: yMin, max: yMax };
 };
 
 // верхний слой для интерактивности

@@ -1,26 +1,33 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
+import { useState } from 'react'
+import { conf } from './conf';
 
-
-
-export default function CurrentPrice({socket}) {
-    const [data, setData] = useState()
-    let [test, setTest] = useState(1)
+export default function CurrentPrice({chartProps, stream }) {
+    const [currentPrice, setCurrentPrice] = useState(0)
+    const [currentPosition, setCurrentPosition] = useState(0)
 
     useEffect(() => {
-        console.log(socket, 'data', test)
-    }, [socket])
+        if (stream) {
+            let last = stream.k.c;
+            setCurrentPrice(last);
+            setCurrentPosition(() => {
+                return ((last - chartProps.min) * chartProps.ratio + conf.PADDING)/2;
+            })
+        };
+    }, [stream]);
 
+    useEffect(() => {
+        console.log(chartProps)
+    }, [chartProps])
     
     return (
         <div className='current_price'>
-            {socket} {test}
-            <button onClick={()=>{}}>test</button>
-            <div className='priceLine' style={{
+            {currentPrice}
+            <div className='current_price__priceLine' style={{
                     position: 'absolute',
                     width:'100%',
-                    borderBottom: "1px dashed green",
                     left: '0',
-                    bottom:`50px`
+                    bottom: `${currentPosition}px`
                 }}></div>
             
         </div>
