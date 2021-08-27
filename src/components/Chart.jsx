@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react"
-import { canvasInit, drawChart, drawOverlay } from "./utils"
+import { canvasInit, drawChart, drawOverlay, updateData } from "./utils"
 import SettingsIcon from '@material-ui/icons/Settings';
 import { useState } from "react";
 import ChartModal from "./ChartModal";
@@ -12,12 +12,11 @@ const Chart = ({ socket, chartSet, chartsType, setSettings }) => {
     const [ctxArr, setCtxArr] = useState([])
     const [data, setData] = useState()
     const [stream, setStream] = useState()
-    const [currentSettings, setCurrentSettings] = useState()
+    const [chartProps, setChartProps] = useState({})
     const ref = useRef()
     const refY = useRef()
     const refX = useRef()
     const refOver = useRef()
-    const [chartProps, setChartProps] = useState({})
 
     // инициализация канваса
     useEffect(() => {
@@ -27,24 +26,40 @@ const Chart = ({ socket, chartSet, chartsType, setSettings }) => {
 
     //получение данных
     useEffect(() => {
-        if (!data || currentSettings.coin !== chartSet.coin || currentSettings.tF !== chartSet.tF || currentSettings.limit !== chartSet.limit) {
-            console.log('req', chartSet.id)
-            getData(chartSet.coin, chartSet.tF, chartSet.limit).then((d) => {
-                setData([chartSet.id, d]);
-                setCurrentSettings(chartSet);
-            });
+        const { id, coin, tF, limit } = chartSet;
+        if (!data || data.settings.coin !== coin || data.settings.tF !== tF || data.settings.limit !== limit) {
+            console.log('req', id);
+            getData(coin, tF, limit).then((d) => { setData(d) });
         };
-    }, [chartSet])
+    }, [chartSet, data]);
     
+    // прием данных из стрима для текущей валюты
     useEffect(() => {
-        if (socket && socket.stream === `${chartSet.coin.toLowerCase()}usdt@kline_${chartSet.tF}`)
-        {setStream(socket.data)}
-    }, [socket])
+        const { coin, tF } = chartSet;
+        if (socket && socket.stream === `${coin.toLowerCase()}usdt@kline_${tF}`) {
+            setStream(socket.data);
+            if (socket.data.k.x) {
+                const newData = {
+                    times: socket.data.E,
+                    low: +socket.data.k.l,
+                    high: +socket.data.k.h,
+                    open: +socket.data.k.o,
+                    close: +socket.data.k.c
+                };
+                setData((prev) => {
+                    let temp = updateData(prev, newData)
+                    console.log('update')
+                    return temp
+                })
+            };
+        }
+    }, [socket, chartSet]);
 
-    // отрисовка графика
+    // отрисовка графика и получение его параметров
     useEffect(() => {
         if (data) {
-            setChartProps(drawChart(ctxArr, data[1], chartsType))
+            console.log('draw')
+            setChartProps(drawChart(ctxArr, data, chartsType))
         }
     },[data, ctxArr, chartsType])
 

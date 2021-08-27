@@ -104,8 +104,8 @@ const drawLine = (ctx, coord, color) => {
   ctx.lineWidth = 3;
   ctx.strokeStyle = color;
 
-  coord.forEach((i) => {
-    let [x, y] = i;
+  coord.forEach((v) => {
+    let [x, y] = v;
     ctx.lineTo(x, y);
   });
 
@@ -115,7 +115,7 @@ const drawLine = (ctx, coord, color) => {
 
 // отрисовка свечей
 const drawCandles = (ctx, columns, colors, ratio, yMin) => {
-  const xRatio = conf.DPI_WIDTH / columns.open.length;
+  const xRatio = (conf.DPI_WIDTH - 25) / columns.open.length;
 
   for (let i in columns.open) {
     let yO = columns.open[i] - yMin;
@@ -147,7 +147,7 @@ const drawCandles = (ctx, columns, colors, ratio, yMin) => {
 const getCoord = (array, ratio, yMin) => {
   const coord = [];
   // шаг координат
-  const xRatio = conf.DPI_WIDTH / (array.length - 1);
+  const xRatio = (conf.DPI_WIDTH - 40) / (array.length - 1);
 
   for (let i in array) {
     let y = array[i] - yMin;
@@ -163,7 +163,7 @@ export const canvasInit = (canvas, canvasY, canvasX) => {
   return [ctx, ctxY, ctxX];
 };
 
-// финальная отрисовка графика
+// финальная отрисовка графика и возврат параметров графика
 export const drawChart = (
   ctxArray,
   { columns, colors },
@@ -231,4 +231,15 @@ export const drawOverlay = (canvas) => {
       canvas.removeEventListener("mouseout", mouseout);
     },
   };
+};
+
+export const updateData = (d, newData) => {
+  let dt = { colors: d.colors, settings: d.settings, columns: {} };
+  for (let i in d.columns) {
+    let nd = [...d.columns[i]];
+    nd.push(newData[i]);
+    nd.shift();
+    dt.columns[i] = nd;
+  }
+  return dt;
 };

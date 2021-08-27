@@ -10,14 +10,13 @@ const Container = () => {
     const [chartSeting, setChartSeting] = useState([])
     const [settings, setSettings] = useState()
     const [countChart, setCountChart] = useState(2)
-    const [chartsType, setChartsType] = useState('LINE')
+    const [chartsType, setChartsType] = useState('CANDLE')
     const [socketData, setSocketData] = useState()
     const [wsString, setString] = useState()
-    const [ws, setSocket] = useState()
+    const [, setSocket] = useState()
 
     useEffect(() => {
         if (chartSeting.length !== 0) {
-            console.log('setStr');
             setString(chartSeting.reduce((str, settingObj) => {
                 return str + `${settingObj.coin.toLowerCase()}usdt@kline_${settingObj.tF}/`;
             }, ''));
@@ -26,12 +25,15 @@ const Container = () => {
 
     useEffect(() => {
         if (wsString) {
-            console.log('socket')
+            console.log('run socket')
             const socket = new WebSocket(`wss://fstream.binance.com/stream?streams=${wsString.slice(0, wsString.length - 1)}`)
             
             socket.onopen = function () {
-                if (ws) ws.close()
-                setSocket(socket)
+                setSocket((prevS) => {
+                    if (prevS) prevS.close()
+                    return socket
+                })
+                
             }
             socket.onmessage = async function (event) {
                 let d = await JSON.parse(event.data)
@@ -44,11 +46,11 @@ const Container = () => {
         }
     }, [wsString])
 
-    // первичная инициализация (временно)
     // зависимость количества графиков на странице от селектора
     useEffect(() => {
+        // первичная инициализация (временно)
         const initCurrency = ['BTC', 'ADA', 'ETH', 'LTC', 'DOT', 'XRP'];
-        const initSet = { limit: 60, tF: '5m' };
+        const initSet = { limit: 50, tF: '1m' };
         const set = [];
         
         for (let i = 1; i <= countChart; i++) {
@@ -59,7 +61,6 @@ const Container = () => {
     
     // синхронизация с новыми настройками графика
     useEffect(() => {
-        
         if (settings) {
             setChartSeting((prev) => {
                 return prev.map((i) => settings.id === i.id ? settings : i);

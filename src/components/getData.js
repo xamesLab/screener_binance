@@ -4,8 +4,14 @@ import { conf } from "./conf";
 export async function getData(currency, timeFrame, limit) {
   // библиотека API Binance
   const client = Binance();
+  // структура данных
   const data = {
     colors: { low: conf.colors.low, high: conf.colors.high },
+    settings: {
+      coin: currency,
+      tF: timeFrame,
+      limit: limit,
+    },
     columns: {
       times: [],
       low: [],
@@ -22,13 +28,15 @@ export async function getData(currency, timeFrame, limit) {
     limit: limit,
   });
 
-  // формирование структуры
-  resp.forEach((i) => {
-    data.columns.times.push(i.openTime);
-    data.columns.low.push(+i.low);
-    data.columns.high.push(+i.high);
-    data.columns.open.push(+i.open);
-    data.columns.close.push(+i.close);
+  // заполнение структуры
+  resp.forEach((v, i, arr) => {
+    if (i !== arr.length - 1) {
+      data.columns.times.push(v.openTime);
+      data.columns.low.push(+v.low);
+      data.columns.high.push(+v.high);
+      data.columns.open.push(+v.open);
+      data.columns.close.push(+v.close);
+    }
   });
   return data;
 }
