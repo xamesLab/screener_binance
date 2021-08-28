@@ -39,24 +39,57 @@ const getBoundaries = ({ low, high }) => {
 };
 
 // отрисовка временной шкалы
-const drawAxisX = (ctx, { times }) => {
-  const step = conf.DPI_WIDTH / (times.length - 1);
+const drawAxisX = (ctx, { times }, interval) => {
+  const step = (conf.DPI_WIDTH - 25) / times.length;
+  const timeRatio = (times[1] - times[0]) / step;
+  console.log((times[1] - times[0]) / step, step);
+  //let currentDate = new Date(times[0]);
 
   ctx.beginPath();
   ctx.strokeStyle = "#777";
   ctx.font = "normal 22px Helvetica, sans-serif";
   ctx.fillStyle = "#777";
   for (let i = 0; i < times.length; i++) {
-    const x = step * i;
     let d = new Date(times[i]);
-    if (d.getMinutes() === 0 || d.getMinutes() === 30) {
-      const text = `${d.getHours()}:${
-        d.getMinutes() === 0 ? "00" : d.getMinutes()
-      }`;
-      ctx.fillText(text, x - 28, 35);
-      ctx.moveTo(x, 0);
-      ctx.lineTo(x, 10);
+    const x = step * i;
+    let text_time = "";
+    if (timeRatio < 28000) {
+      if (d.getMinutes() === 0 || d.getMinutes() === 30) {
+        text_time = `${d.getHours()}:${
+          d.getMinutes() === 0 ? "00" : d.getMinutes()
+        }`;
+        ctx.fillText(text_time, x - 28, 32);
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, 10);
+      }
+    } else if (timeRatio < 55000) {
+      if (d.getMinutes() === 0) {
+        text_time = `${d.getHours()}:00`;
+        ctx.fillText(text_time, x - 28, 32);
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, 10);
+      }
+    } else if (timeRatio < 155000) {
+      if (d.getMinutes() === 0 && d.getHours() % 3 === 0) {
+        text_time = `${d.getHours()}:00`;
+        ctx.fillText(text_time, x - 28, 32);
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, 10);
+      }
     }
+    //console.log(d.getDate());
+
+    // if (d.getMinutes() === 0 || d.getMinutes() === 30) {
+    //   const text = `${d.getHours()}:${
+    //     d.getMinutes() === 0 ? "00" : d.getMinutes()
+    //   }`;
+    //   ctx.fillText(text, x - 28, 32);
+    //   if (d.getHours() === 0 && d.getMinutes() === 0) {
+    //     ctx.fillText("text", x - 28, 52);
+    //   }
+    //   ctx.moveTo(x, 0);
+    //   ctx.lineTo(x, 10);
+    // }
   }
   ctx.stroke();
   ctx.closePath();
@@ -166,12 +199,14 @@ export const canvasInit = (canvas, canvasY, canvasX) => {
 // финальная отрисовка графика и возврат параметров графика
 export const drawChart = (
   ctxArray,
-  { columns, colors },
+  { columns, settings, colors },
   chartsType = "LINE"
 ) => {
   const ctx = ctxArray[0];
   const ctxY = ctxArray[1];
   const ctxX = ctxArray[2];
+
+  const { tF } = settings;
 
   ctx.clearRect(0, 0, conf.DPI_WIDTH, conf.DPI_HEIGHT);
   ctxY.clearRect(0, 0, conf.DPI_WIDTH, conf.DPI_HEIGHT);
@@ -180,7 +215,7 @@ export const drawChart = (
   const [yMin, yMax] = getBoundaries(columns);
   drawChartField(ctx);
   drawAxisY(ctxY, yMin, yMax);
-  drawAxisX(ctxX, columns);
+  drawAxisX(ctxX, columns, tF);
 
   const yRatio = conf.VIEW_HEIGHT / (yMax - yMin);
 

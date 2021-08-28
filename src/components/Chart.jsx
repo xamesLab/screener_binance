@@ -66,7 +66,7 @@ const Chart = ({ socket, chartSet, chartsType, setSettings }) => {
     return (
         <div className="chart">
             {!data?<div className="chart__load"><Loading/></div>:''}
-            <div className="chart__label">{chartSet.coin}/USDT {chartSet.tF} #{chartSet.id}</div>
+            <div className="chart__label">{chartSet.coin}/USDT {chartSet.tF}</div>
             <CurrentPrice chartProps={chartProps} stream={stream}/>
             <ChartModal
                 setActive={setactiveChartModal}
