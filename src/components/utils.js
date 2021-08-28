@@ -42,8 +42,7 @@ const getBoundaries = ({ low, high }) => {
 const drawAxisX = (ctx, { times }, interval) => {
   const step = (conf.DPI_WIDTH - 25) / times.length;
   const timeRatio = (times[1] - times[0]) / step;
-  console.log((times[1] - times[0]) / step, step);
-  //let currentDate = new Date(times[0]);
+  let countDate = 0;
 
   ctx.beginPath();
   ctx.strokeStyle = "#777";
@@ -69,27 +68,102 @@ const drawAxisX = (ctx, { times }, interval) => {
         ctx.moveTo(x, 0);
         ctx.lineTo(x, 10);
       }
-    } else if (timeRatio < 155000) {
-      if (d.getMinutes() === 0 && d.getHours() % 3 === 0) {
+    } else if (timeRatio < 110000) {
+      if (d.getMinutes() === 0 && d.getHours() % 2 === 1) {
         text_time = `${d.getHours()}:00`;
         ctx.fillText(text_time, x - 28, 32);
         ctx.moveTo(x, 0);
         ctx.lineTo(x, 10);
       }
+    } else if (timeRatio < 165000) {
+      if (d.getHours() % 3 === 0) {
+        text_time = `${d.getHours()}:00`;
+        ctx.fillText(text_time, x - 28, 32);
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, 10);
+      }
+    } else if (timeRatio < 305000) {
+      if (
+        d.getHours() === 3 ||
+        d.getHours() === 9 ||
+        d.getHours() === 15 ||
+        d.getHours() === 21
+      ) {
+        text_time = `${d.getHours()}:00`;
+        ctx.fillText(text_time, x - 28, 32);
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, 10);
+      }
+    } else if (timeRatio < 650000) {
+      if (d.getHours() === 3 || d.getHours() === 15) {
+        text_time = `${d.getHours()}:00`;
+        ctx.fillText(text_time, x - 28, 32);
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, 10);
+      }
+    } else if (timeRatio < 1200000) {
+      if (d.getHours() === 3) {
+        text_time = `${d.getDate()}.${
+          (d.getMonth() + 1) / 10 >= 1
+            ? d.getMonth() + 1
+            : "0" + (d.getMonth() + 1)
+        }`;
+        ctx.fillText(text_time, x - 28, 32);
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, 10);
+      }
+    } else if (timeRatio < 3500000 && d.getHours() === 3) {
+      if (d.getDate() % 3 === 0) {
+        text_time = `${d.getDate()}.${
+          (d.getMonth() + 1) / 10 >= 1
+            ? d.getMonth() + 1
+            : "0" + (d.getMonth() + 1)
+        }`;
+        ctx.fillText(text_time, x - 28, 32);
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, 10);
+      }
+    } else if (
+      times[1] - times[0] === 86400000 ||
+      times[1] - times[0] === 43200000
+    ) {
+      if (d.getDate() === 1 && d.getHours() === 3) {
+        text_time = `${d.getDate()}.${
+          (d.getMonth() + 1) / 10 >= 1
+            ? d.getMonth() + 1
+            : "0" + (d.getMonth() + 1)
+        }`;
+        ctx.fillText(text_time, x - 28, 32);
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, 10);
+      }
+    } else if (
+      times[1] - times[0] === 259200000 ||
+      times[1] - times[0] === 604800000
+    ) {
+      if ((d.getMonth() + 1) % 2 === 0 && d.getDate() < countDate) {
+        countDate = 0;
+        text_time = `${d.getDate()}.${
+          (d.getMonth() + 1) / 10 >= 1
+            ? d.getMonth() + 1
+            : "0" + (d.getMonth() + 1)
+        }.${d.getFullYear().toString().slice(2, 4)}`;
+        ctx.fillText(text_time, x - 28, 32);
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, 10);
+      } else {
+        countDate = d.getDate();
+      }
+    } else if ((d.getMonth() + 1) % 6 === 0) {
+      text_time = `${d.getDate()}.${
+        (d.getMonth() + 1) / 10 >= 1
+          ? d.getMonth() + 1
+          : "0" + (d.getMonth() + 1)
+      }.${d.getFullYear().toString().slice(2, 4)}`;
+      ctx.fillText(text_time, x - 28, 32);
+      ctx.moveTo(x, 0);
+      ctx.lineTo(x, 10);
     }
-    //console.log(d.getDate());
-
-    // if (d.getMinutes() === 0 || d.getMinutes() === 30) {
-    //   const text = `${d.getHours()}:${
-    //     d.getMinutes() === 0 ? "00" : d.getMinutes()
-    //   }`;
-    //   ctx.fillText(text, x - 28, 32);
-    //   if (d.getHours() === 0 && d.getMinutes() === 0) {
-    //     ctx.fillText("text", x - 28, 52);
-    //   }
-    //   ctx.moveTo(x, 0);
-    //   ctx.lineTo(x, 10);
-    // }
   }
   ctx.stroke();
   ctx.closePath();
