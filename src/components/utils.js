@@ -39,130 +39,79 @@ const getBoundaries = ({ low, high }) => {
 };
 
 // отрисовка временной шкалы
-const drawAxisX = (ctx, { times }, interval) => {
+const drawAxisX = (ctx, { times }) => {
+  const printLabel = (tStep, text) => {
+    ctx.fillText(text, tStep - 28, 32);
+    ctx.moveTo(tStep, 0);
+    ctx.lineTo(tStep, 10);
+  };
   const step = (conf.DPI_WIDTH - 25) / times.length;
-  const timeRatio = (times[1] - times[0]) / step;
+  const timeStep = times[1] - times[0];
+  const timeRatio = timeStep / step;
   let countDate = 0;
 
   ctx.beginPath();
   ctx.strokeStyle = "#777";
   ctx.font = "normal 22px Helvetica, sans-serif";
   ctx.fillStyle = "#777";
+
   for (let i = 0; i < times.length; i++) {
-    let d = new Date(times[i]);
-    const x = step * i;
-    let text_time = "";
+    const d = new Date(times[i]);
+    const day = d.getDate();
+    const hours = d.getHours();
+    const mins = d.getMinutes();
+    const month = d.getMonth() + 1;
+    const monthLbl = month / 10 >= 1 ? month : "0" + month;
+    const yearLbl = d.getFullYear().toString().slice(2, 4);
+
     if (timeRatio < 28000) {
-      if (d.getMinutes() === 0 || d.getMinutes() === 30) {
-        text_time = `${d.getHours()}:${
-          d.getMinutes() === 0 ? "00" : d.getMinutes()
-        }`;
-        ctx.fillText(text_time, x - 28, 32);
-        ctx.moveTo(x, 0);
-        ctx.lineTo(x, 10);
+      if (mins === 0 || mins === 30) {
+        printLabel(step * i, `${hours}:${mins === 0 ? "00" : mins}`);
       }
     } else if (timeRatio < 55000) {
-      if (d.getMinutes() === 0) {
-        text_time = `${d.getHours()}:00`;
-        ctx.fillText(text_time, x - 28, 32);
-        ctx.moveTo(x, 0);
-        ctx.lineTo(x, 10);
+      if (mins === 0) {
+        printLabel(step * i, `${hours}:00`);
       }
     } else if (timeRatio < 110000) {
-      if (d.getMinutes() === 0 && d.getHours() % 2 === 1) {
-        text_time = `${d.getHours()}:00`;
-        ctx.fillText(text_time, x - 28, 32);
-        ctx.moveTo(x, 0);
-        ctx.lineTo(x, 10);
+      if (mins === 0 && hours % 2 === 1) {
+        printLabel(step * i, `${hours}:00`);
       }
     } else if (timeRatio < 165000) {
-      if (d.getHours() % 3 === 0) {
-        text_time = `${d.getHours()}:00`;
-        ctx.fillText(text_time, x - 28, 32);
-        ctx.moveTo(x, 0);
-        ctx.lineTo(x, 10);
+      if (mins === 0 && hours % 3 === 0) {
+        printLabel(step * i, `${hours}:00`);
       }
     } else if (timeRatio < 305000) {
       if (
-        d.getHours() === 3 ||
-        d.getHours() === 9 ||
-        d.getHours() === 15 ||
-        d.getHours() === 21
+        mins === 0 &&
+        (hours === 3 || hours === 9 || hours === 15 || hours === 21)
       ) {
-        text_time = `${d.getHours()}:00`;
-        ctx.fillText(text_time, x - 28, 32);
-        ctx.moveTo(x, 0);
-        ctx.lineTo(x, 10);
+        printLabel(step * i, `${hours}:00`);
       }
     } else if (timeRatio < 650000) {
-      if (d.getHours() === 3 || d.getHours() === 15) {
-        text_time = `${d.getHours()}:00`;
-        ctx.fillText(text_time, x - 28, 32);
-        ctx.moveTo(x, 0);
-        ctx.lineTo(x, 10);
+      if (hours === 3 || hours === 15) {
+        printLabel(step * i, `${hours}:00`);
       }
     } else if (timeRatio < 1200000) {
-      if (d.getHours() === 3) {
-        text_time = `${d.getDate()}.${
-          (d.getMonth() + 1) / 10 >= 1
-            ? d.getMonth() + 1
-            : "0" + (d.getMonth() + 1)
-        }`;
-        ctx.fillText(text_time, x - 28, 32);
-        ctx.moveTo(x, 0);
-        ctx.lineTo(x, 10);
+      if (hours === 3) {
+        printLabel(step * i, `${day}.${monthLbl}`);
       }
-    } else if (timeRatio < 3500000 && d.getHours() === 3) {
-      if (d.getDate() % 3 === 0) {
-        text_time = `${d.getDate()}.${
-          (d.getMonth() + 1) / 10 >= 1
-            ? d.getMonth() + 1
-            : "0" + (d.getMonth() + 1)
-        }`;
-        ctx.fillText(text_time, x - 28, 32);
-        ctx.moveTo(x, 0);
-        ctx.lineTo(x, 10);
+    } else if (timeRatio < 3500000 && hours === 3) {
+      if (day % 3 === 0) {
+        printLabel(step * i, `${day}.${monthLbl}`);
       }
-    } else if (
-      times[1] - times[0] === 86400000 ||
-      times[1] - times[0] === 43200000
-    ) {
-      if (d.getDate() === 1 && d.getHours() === 3) {
-        text_time = `${d.getDate()}.${
-          (d.getMonth() + 1) / 10 >= 1
-            ? d.getMonth() + 1
-            : "0" + (d.getMonth() + 1)
-        }`;
-        ctx.fillText(text_time, x - 28, 32);
-        ctx.moveTo(x, 0);
-        ctx.lineTo(x, 10);
+    } else if (timeStep === 86400000 || timeStep === 43200000) {
+      if (day === 1 && hours === 3) {
+        printLabel(step * i, `${day}.${monthLbl}`);
       }
-    } else if (
-      times[1] - times[0] === 259200000 ||
-      times[1] - times[0] === 604800000
-    ) {
-      if ((d.getMonth() + 1) % 2 === 0 && d.getDate() < countDate) {
+    } else if (timeStep === 259200000 || timeStep === 604800000) {
+      if (month % 2 === 0 && day < countDate) {
         countDate = 0;
-        text_time = `${d.getDate()}.${
-          (d.getMonth() + 1) / 10 >= 1
-            ? d.getMonth() + 1
-            : "0" + (d.getMonth() + 1)
-        }.${d.getFullYear().toString().slice(2, 4)}`;
-        ctx.fillText(text_time, x - 28, 32);
-        ctx.moveTo(x, 0);
-        ctx.lineTo(x, 10);
+        printLabel(step * i, `${day}.${monthLbl}.${yearLbl}`);
       } else {
-        countDate = d.getDate();
+        countDate = day;
       }
-    } else if ((d.getMonth() + 1) % 6 === 0) {
-      text_time = `${d.getDate()}.${
-        (d.getMonth() + 1) / 10 >= 1
-          ? d.getMonth() + 1
-          : "0" + (d.getMonth() + 1)
-      }.${d.getFullYear().toString().slice(2, 4)}`;
-      ctx.fillText(text_time, x - 28, 32);
-      ctx.moveTo(x, 0);
-      ctx.lineTo(x, 10);
+    } else if (month % 6 === 0) {
+      printLabel(step * i, `${day}.${monthLbl}.${yearLbl}`);
     }
   }
   ctx.stroke();
@@ -273,14 +222,12 @@ export const canvasInit = (canvas, canvasY, canvasX) => {
 // финальная отрисовка графика и возврат параметров графика
 export const drawChart = (
   ctxArray,
-  { columns, settings, colors },
+  { columns, colors },
   chartsType = "LINE"
 ) => {
   const ctx = ctxArray[0];
   const ctxY = ctxArray[1];
   const ctxX = ctxArray[2];
-
-  const { tF } = settings;
 
   ctx.clearRect(0, 0, conf.DPI_WIDTH, conf.DPI_HEIGHT);
   ctxY.clearRect(0, 0, conf.DPI_WIDTH, conf.DPI_HEIGHT);
@@ -289,7 +236,7 @@ export const drawChart = (
   const [yMin, yMax] = getBoundaries(columns);
   drawChartField(ctx);
   drawAxisY(ctxY, yMin, yMax);
-  drawAxisX(ctxX, columns, tF);
+  drawAxisX(ctxX, columns);
 
   const yRatio = conf.VIEW_HEIGHT / (yMax - yMin);
 
