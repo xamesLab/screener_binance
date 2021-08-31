@@ -9,7 +9,7 @@ import Header from "./Header"
 const Container = () => {
     const [chartSeting, setChartSeting] = useState([])
     const [settings, setSettings] = useState()
-    const [countChart, setCountChart] = useState(1)
+    const [countChart, setCountChart] = useState(3)
     const [chartsType, setChartsType] = useState('CANDLE')
     const [socketData, setSocketData] = useState()
     const [wsString, setString] = useState()
@@ -49,8 +49,8 @@ const Container = () => {
     // зависимость количества графиков на странице от селектора
     useEffect(() => {
         // первичная инициализация (временно)
-        const initCurrency = ['BTC', 'ADA', 'ETH', 'LTC', 'DOT', 'XRP'];
-        const initSet = { limit: 10, tF: '5m' };
+        const initCurrency = ['BTC', 'ADA', 'ETH', 'LTC', 'DOT', 'XRP', 'YFII','SRM','LINK','EOS','YFI'];
+        const initSet = { limit: 70, tF: '5m' };
         const set = [];
 
         for (let i = 1; i <= countChart; i++) {
@@ -70,7 +70,7 @@ const Container = () => {
 
     return (
         <div className="container">
-            <Header setCount={setCountChart} setChartsType={setChartsType} chartsType={chartsType} />
+            <Header setCount={setCountChart} countChart={countChart} setChartsType={setChartsType} chartsType={chartsType} />
             <div className="content">
                 {chartSeting.map((v) =>
                     <Chart socket={socketData} key={v.id} chartSet={v} chartsType={chartsType} setSettings={setSettings} />

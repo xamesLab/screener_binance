@@ -44,6 +44,7 @@ const ChartModal = ({ active, setActive, chartSet, setSettings }) => {
                     <option disabled value="">TF</option>
                     {TF.map(i => <option key={i} value={`${i}`}>{ i }</option>)}
                 </select>
+                {/*TODO: рендер опций по массиву актуальных пар*/}
                 <select
                     value={selectCurrency}
                     onChange={changeCurrency}>
@@ -54,6 +55,11 @@ const ChartModal = ({ active, setActive, chartSet, setSettings }) => {
                     <option value="BTC">BTC</option>
                     <option value="DOT">DOT</option>
                     <option value="XRP">XRP</option>
+                    <option value="YFII">YFII</option>
+                    <option value="SRM">SRM</option>
+                    <option value="LINK">LINK</option>
+                    <option value="EOS">EOS</option>
+                    <option value="YFI">YFI</option>
                 </select>
                 <button className='modal_chart__btn' onClick={requestData}>req</button>
             </div>

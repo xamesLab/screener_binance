@@ -5,7 +5,9 @@ import { conf } from './conf';
 export default function CurrentPrice({chartProps, stream }) {
     const [currentPosition, setCurrentPosition] = useState({})
     const [style, setStyle] = useState()
+    const [stylePL, setStylePL] = useState()
 
+    // конвертация цены в позицию на графике (в пикселях)
     useEffect(() => {
         const { min, ratio } = chartProps;
         const getPosition = (price) => {
@@ -22,45 +24,40 @@ export default function CurrentPrice({chartProps, stream }) {
         };
     }, [stream, chartProps]);
 
+    // определение стиля падающей и растущей цены
     useEffect(() => {
         if (currentPosition.c < currentPosition.o) {
             setStyle({
-                backgroundColor: conf.colors.low,
+                border: `1px solid ${conf.colors.low}`,
                 height: currentPosition.o-currentPosition.c,
                 bottom: currentPosition.c,
             })
+            setStylePL({backgroundColor:`${conf.colors.low}`})
         } else if(currentPosition.c) {
             setStyle({
-                backgroundColor: conf.colors.high,
+                border: `1px solid ${conf.colors.high}`,
                 height: currentPosition.c - currentPosition.o,
                 bottom: currentPosition.o,
             })
+            setStylePL({backgroundColor:`${conf.colors.high}`})
 } 
     }, [currentPosition])
     
     return (
         <div className='current_price'>
-
             <div className="current_price__high" style={{
-                position: 'absolute',
-                right: '10px',
                 borderRight: `2px solid ${conf.colors.high}` ,
                 height: `${currentPosition.h-currentPosition.o}px`,
                 bottom: `${currentPosition.o}px`
             }}></div>
             <div className="current_price__low" style={{
-                position: 'absolute',
-                right: '10px',
                 borderRight: `2px solid ${conf.colors.low}` ,
                 height: `${currentPosition.o - currentPosition.l}px`,
                 bottom: `${currentPosition.l}px`
             }}></div>
             <div className="current_price__candle" style={style}></div>
             <div className='current_price__priceLine' style={{
-                position: 'absolute',
-                borderBottom: `1px solid ${style?style.backgroundColor:'#777'}`,
-                width:'100%',
-                left: '0',
+                borderBottom: `1px solid ${stylePL?stylePL.backgroundColor:'#777'}`,
                 bottom: `${currentPosition.c}px`
             }}></div>
             

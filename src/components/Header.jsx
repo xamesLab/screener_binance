@@ -1,10 +1,7 @@
 import React from "react"
-import { useState } from "react"
 
-const Header = ({setCount, setChartsType, chartsType}) => {
-    const [value, setValue] = useState(2)
-    
-
+const Header = ({setCount, countChart, setChartsType, chartsType}) => {
+    // переключение типа графика
     const chartLine = () => {
         if (chartsType === 'CANDLE') {
             setChartsType('LINE')
@@ -24,13 +21,12 @@ const Header = ({setCount, setChartsType, chartsType}) => {
                 <button onClick={chartCandles} className={`header__toggle_btn ${chartsType==='CANDLE'?'active':''}`}>candles</button>
             </div>
             <p className="header__label">count of chart:</p>
-            <select value={value} onChange={(e) => {
-                setValue(e.target.value)
+            <select value={countChart} onChange={(e) => {
                 setCount(e.target.value)
             }}>
-                <option value={2}>2</option>
-                <option value={4}>4</option>
+                <option value={3}>3</option>
                 <option value={6}>6</option>
+                <option value={9}>9</option>
             </select>
         </div>
     ) 

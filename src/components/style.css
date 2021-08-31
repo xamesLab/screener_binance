@@ -1,5 +1,5 @@
 .container {
-    width: 90vw;
+    width: 95vw;
     min-height: 100vh;
     background-color: aliceblue;
     display: flex;
@@ -87,14 +87,14 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    padding: 3rem 2rem 2rem 2rem;
+    padding: 2rem 0.5rem 1rem 0.5rem;
 }
 
 .chart {
     display: grid;
     grid-template-areas: "field y" "x set";
     position: relative;
-    margin: 1rem;
+    margin: 0.2rem;
 }
 
 .modal_chart {
@@ -186,6 +186,9 @@ canvas {
 
 .current_price__priceLine {
     border-bottom: 1px solid rgb(35, 156, 50);
+    width: 100%;
+    left: 0;
+    position: absolute;
 }
 
 .current_price__candle {
@@ -193,3 +196,9 @@ canvas {
     right: 7px;
     width: 8px;
 }
+
+.current_price__high, .current_price__low {
+    position: absolute;
+    right: 10px
+}
+

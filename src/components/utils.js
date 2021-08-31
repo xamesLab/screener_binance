@@ -14,7 +14,7 @@ const getContextX = (canvas) => {
   canvas.width = conf.DPI_WIDTH;
   canvas.height = 60;
   canvas.style.width = `${conf.WIDTH}px`;
-  canvas.style.height = `30px`;
+  canvas.style.height = `30px`; // высота временной шкалы
   return canvas.getContext("2d");
 };
 
@@ -22,7 +22,7 @@ const getContextX = (canvas) => {
 const getContextY = (canvas) => {
   canvas.width = 110;
   canvas.height = conf.DPI_HEIGHT;
-  canvas.style.width = `55px`;
+  canvas.style.width = `55px`; // ширина ценовой шкалы
   canvas.style.height = `${conf.HEIGHT}px`;
   return canvas.getContext("2d");
 };
@@ -40,14 +40,15 @@ const getBoundaries = ({ low, high }) => {
 
 // отрисовка временной шкалы
 const drawAxisX = (ctx, { times }) => {
+  // отрисовка метки
   const printLabel = (tStep, text) => {
     ctx.fillText(text, tStep - 28, 32);
     ctx.moveTo(tStep, 0);
     ctx.lineTo(tStep, 10);
   };
-  const step = (conf.DPI_WIDTH - 25) / times.length;
-  const timeStep = times[1] - times[0];
-  const timeRatio = timeStep / step;
+  const step = (conf.DPI_WIDTH - 25) / times.length; // DPI между двумя соседними точками графика
+  const timeStep = times[1] - times[0]; // мс между двумя соседними точками графика
+  const timeRatio = timeStep / step; // "плотность" шкалы времени
   let countDate = 0;
 
   ctx.beginPath();
@@ -55,6 +56,7 @@ const drawAxisX = (ctx, { times }) => {
   ctx.font = "normal 22px Helvetica, sans-serif";
   ctx.fillStyle = "#777";
 
+  // выбор подходящей метки, в зависимости от плотности временной шкалы
   for (let i = 0; i < times.length; i++) {
     const d = new Date(times[i]);
     const day = d.getDate();
@@ -164,39 +166,47 @@ const drawLine = (ctx, coord, color) => {
     let [x, y] = v;
     ctx.lineTo(x, y);
   });
-
   ctx.stroke();
-  ctx.closePath();
 };
 
 // отрисовка свечей
 const drawCandles = (ctx, columns, colors, ratio, yMin) => {
   const xRatio = (conf.DPI_WIDTH - 25) / columns.open.length;
 
-  for (let i in columns.open) {
-    let yO = columns.open[i] - yMin;
-    let yC = columns.close[i] - yMin;
-    let yL = columns.low[i] - yMin;
-    let yH = columns.high[i] - yMin;
-    ctx.beginPath();
-    ctx.lineWidth = 9;
+  // отрисовка от/до
+  const _draw = (from, unto, index) => {
+    ctx.moveTo(xRatio * index, conf.DPI_HEIGHT - from * ratio - conf.PADDING);
+    ctx.lineTo(xRatio * index, conf.DPI_HEIGHT - unto * ratio - conf.PADDING);
+  };
 
+  for (let i in columns.open) {
+    // дельта от нижней границы до величины цены
+    // тело
+    const yO = columns.open[i] - yMin;
+    const yC = columns.close[i] - yMin;
+    // тень
+    const yL = columns.low[i] - yMin;
+    const yH = columns.high[i] - yMin;
+
+    ctx.beginPath();
+
+    // цвет свечи
     if (columns.open[i] > columns.close[i]) {
       ctx.strokeStyle = colors.low;
     } else {
       ctx.strokeStyle = colors.high;
     }
-    ctx.moveTo(xRatio * i, conf.DPI_HEIGHT - yO * ratio - conf.PADDING);
-    ctx.lineTo(xRatio * i, conf.DPI_HEIGHT - yC * ratio - conf.PADDING);
+
+    // отрисовка тела
+    ctx.lineWidth = 9;
+    _draw(yO, yC, i);
     ctx.stroke();
 
+    // отрисовка тени
     ctx.lineWidth = 3;
-    ctx.moveTo(xRatio * i, conf.DPI_HEIGHT - yL * ratio - conf.PADDING);
-    ctx.lineTo(xRatio * i, conf.DPI_HEIGHT - yH * ratio - conf.PADDING);
+    _draw(yL, yH, i);
     ctx.stroke();
   }
-
-  ctx.closePath();
 };
 
 // координаты по принятым данным
