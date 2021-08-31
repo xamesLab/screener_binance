@@ -16,6 +16,7 @@ const Header = ({setCount, countChart, setChartsType, chartsType}) => {
 
     return (
         <div className="header">
+            <button> colors </button>
             <div className="header__toggle_charts">
                 <button onClick={chartLine} className={`header__toggle_btn ${chartsType==='LINE'?'active':''}`}>line</button>
                 <button onClick={chartCandles} className={`header__toggle_btn ${chartsType==='CANDLE'?'active':''}`}>candles</button>
