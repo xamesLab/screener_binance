@@ -16,14 +16,26 @@ export const setCandle = () => {
   };
 };
 
-export const sizeUP = () => {
+export const widthMore = () => {
   return {
-    type: "UP",
+    type: "WIDTH_MORE",
   };
 };
 
-export const sizeDOWN = () => {
+export const widthLess = () => {
   return {
-    type: "DOWN",
+    type: "WIDTH_LESS",
+  };
+};
+
+export const heightMore = () => {
+  return {
+    type: "HEIGHT_MORE",
+  };
+};
+
+export const heightLess = () => {
+  return {
+    type: "HEIGHT_LESS",
   };
 };

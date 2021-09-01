@@ -1,29 +1,29 @@
 import { conf } from "./conf";
 
 // инициализация канваса
-const getCanvasContext = (canvas, h) => {
-  canvas.width = conf.DPI_WIDTH;
-  canvas.height = h * 2;
-  canvas.style.width = `${conf.WIDTH}px`;
-  canvas.style.height = `${h}px`;
+const getCanvasContext = (canvas, { width, height }) => {
+  canvas.width = width * 2;
+  canvas.height = height * 2;
+  canvas.style.width = `${width}px`;
+  canvas.style.height = `${height}px`;
   return canvas.getContext("2d");
 };
 
 // инициализация канваса
-const getContextX = (canvas) => {
-  canvas.width = conf.DPI_WIDTH;
+const getContextX = (canvas, { width }) => {
+  canvas.width = width * 2;
   canvas.height = 60;
-  canvas.style.width = `${conf.WIDTH}px`;
+  canvas.style.width = `${width}px`;
   canvas.style.height = `30px`; // высота временной шкалы
   return canvas.getContext("2d");
 };
 
 // инициализация канваса
-const getContextY = (canvas, h) => {
+const getContextY = (canvas, { height }) => {
   canvas.width = 110;
-  canvas.height = h * 2;
+  canvas.height = height * 2;
   canvas.style.width = `55px`; // ширина ценовой шкалы
-  canvas.style.height = `${h}px`;
+  canvas.style.height = `${height}px`;
   return canvas.getContext("2d");
 };
 
@@ -39,14 +39,14 @@ const getBoundaries = ({ low, high }) => {
 };
 
 // отрисовка временной шкалы
-const drawAxisX = (ctx, { times }) => {
+const drawAxisX = (ctx, { times }, width) => {
   // отрисовка метки
   const printLabel = (tStep, text) => {
     ctx.fillText(text, tStep - 28, 32);
     ctx.moveTo(tStep, 0);
     ctx.lineTo(tStep, 10);
   };
-  const step = (conf.DPI_WIDTH - 25) / times.length; // DPI между двумя соседними точками графика
+  const step = (width * 2 - 25) / times.length; // DPI между двумя соседними точками графика
   const timeStep = times[1] - times[0]; // мс между двумя соседними точками графика
   const timeRatio = timeStep / step; // "плотность" шкалы времени
   let countDate = 0;
@@ -121,8 +121,8 @@ const drawAxisX = (ctx, { times }) => {
 };
 
 // отрисовка ценовой шкалы
-const drawAxisY = (ctx, yMin, yMax, h) => {
-  const step = (h * 2 - 30) / conf.ROWS_COUNT;
+const drawAxisY = (ctx, yMin, yMax, height) => {
+  const step = (height * 2 - 30) / conf.ROWS_COUNT;
   const textStep = (yMax - yMin) / conf.ROWS_COUNT;
 
   ctx.beginPath();
@@ -141,8 +141,8 @@ const drawAxisY = (ctx, yMin, yMax, h) => {
 };
 
 // отрисовка поля графика
-const drawChartField = (ctx, h) => {
-  const step = (h * 2 - 30) / conf.ROWS_COUNT;
+const drawChartField = (ctx, { height, width }) => {
+  const step = (height * 2 - 30) / conf.ROWS_COUNT;
 
   ctx.beginPath();
   ctx.lineWidth = 1;
@@ -150,7 +150,7 @@ const drawChartField = (ctx, h) => {
   for (let i = 0; i <= conf.ROWS_COUNT; i++) {
     const y = step * i;
     ctx.moveTo(0, y + conf.PADDING + 0.5);
-    ctx.lineTo(conf.DPI_WIDTH, y + conf.PADDING);
+    ctx.lineTo(width * 2, y + conf.PADDING);
   }
   ctx.stroke();
   ctx.closePath();
@@ -170,13 +170,13 @@ const drawLine = (ctx, coord, color) => {
 };
 
 // отрисовка свечей
-const drawCandles = (ctx, columns, colors, ratio, yMin, h) => {
-  const xRatio = (conf.DPI_WIDTH - 25) / columns.open.length;
+const drawCandles = (ctx, columns, colors, ratio, yMin, { width, height }) => {
+  const xRatio = (width * 2 - 25) / columns.open.length;
 
   // отрисовка от/до
-  const _draw = (from, unto, index, h) => {
-    ctx.moveTo(xRatio * index, h * 2 - from * ratio - conf.PADDING);
-    ctx.lineTo(xRatio * index, h * 2 - unto * ratio - conf.PADDING);
+  const _draw = (from, unto, index) => {
+    ctx.moveTo(xRatio * index, height * 2 - from * ratio - conf.PADDING);
+    ctx.lineTo(xRatio * index, height * 2 - unto * ratio - conf.PADDING);
   };
 
   for (let i in columns.open) {
@@ -199,33 +199,33 @@ const drawCandles = (ctx, columns, colors, ratio, yMin, h) => {
 
     // отрисовка тела
     ctx.lineWidth = 9;
-    _draw(yO, yC, i, h);
+    _draw(yO, yC, i);
     ctx.stroke();
 
     // отрисовка тени
     ctx.lineWidth = 3;
-    _draw(yL, yH, i, h);
+    _draw(yL, yH, i);
     ctx.stroke();
   }
 };
 
 // координаты по принятым данным
-const getCoord = (array, ratio, yMin, h) => {
+const getCoord = (array, ratio, yMin, { height, width }) => {
   const coord = [];
   // шаг координат
-  const xRatio = (conf.DPI_WIDTH - 40) / (array.length - 1);
+  const xRatio = (width * 2 - 40) / (array.length - 1);
 
   for (let i in array) {
     let y = array[i] - yMin;
-    coord.push([i * xRatio, h * 2 - y * ratio - conf.PADDING]);
+    coord.push([i * xRatio, height * 2 - y * ratio - conf.PADDING]);
   }
   return coord;
 };
 
-export const canvasInit = (canvas, canvasY, canvasX, h) => {
-  const ctx = getCanvasContext(canvas, h);
-  const ctxY = getContextY(canvasY, h);
-  const ctxX = getContextX(canvasX, h);
+export const canvasInit = (canvas, canvasY, canvasX, size) => {
+  const ctx = getCanvasContext(canvas, size);
+  const ctxY = getContextY(canvasY, size);
+  const ctxX = getContextX(canvasX, size);
   return [ctx, ctxY, ctxX];
 };
 
@@ -234,59 +234,60 @@ export const drawChart = (
   ctxArray,
   { columns, colors },
   chartsType = "LINE",
-  h
+  size
 ) => {
+  const { width, height } = size;
   const ctx = ctxArray[0];
   const ctxY = ctxArray[1];
   const ctxX = ctxArray[2];
 
-  ctx.clearRect(0, 0, conf.DPI_WIDTH, h * 2);
-  ctxY.clearRect(0, 0, conf.DPI_WIDTH, h * 2);
-  ctxX.clearRect(0, 0, conf.DPI_WIDTH, h * 2);
+  ctx.clearRect(0, 0, width * 2, height * 2);
+  ctxY.clearRect(0, 0, width * 2, height * 2);
+  ctxX.clearRect(0, 0, width * 2, height * 2);
 
   const [yMin, yMax] = getBoundaries(columns);
-  drawChartField(ctx, h);
-  drawAxisY(ctxY, yMin, yMax, h);
-  drawAxisX(ctxX, columns);
+  drawChartField(ctx, size);
+  drawAxisY(ctxY, yMin, yMax, height);
+  drawAxisX(ctxX, columns, width);
 
-  const yRatio = (h * 2 - 30) / (yMax - yMin);
+  const yRatio = (height * 2 - 30) / (yMax - yMin);
 
   // линейный график
   if (chartsType === "LINE") {
-    drawLine(ctx, getCoord(columns.high, yRatio, yMin, h), colors.high);
-    drawLine(ctx, getCoord(columns.low, yRatio, yMin, h), colors.low);
+    drawLine(ctx, getCoord(columns.high, yRatio, yMin, size), colors.high);
+    drawLine(ctx, getCoord(columns.low, yRatio, yMin, size), colors.low);
   } else {
     // свечной график
-    drawCandles(ctx, columns, colors, yRatio, yMin, h);
+    drawCandles(ctx, columns, colors, yRatio, yMin, size);
   }
 
   return { ratio: yRatio, min: yMin, max: yMax };
 };
 
 // верхний слой для интерактивности
-export const drawOverlay = (canvas) => {
-  const ctx = getCanvasContext(canvas);
+export const drawOverlay = (canvas, { width, height }) => {
+  const ctx = getCanvasContext(canvas, { width, height });
 
   const mousemove = (e) => {
     ctx.beginPath();
-    ctx.clearRect(0, 0, conf.DPI_WIDTH, conf.DPI_HEIGHT);
+    ctx.clearRect(0, 0, width * 2, height * 2);
     ctx.lineWidth = 1;
     ctx.strokeStyle = "rgb(74, 0, 97)";
 
     ctx.setLineDash([5, 10]);
 
     ctx.moveTo(e.layerX * 2, 0);
-    ctx.lineTo(e.layerX * 2, conf.DPI_HEIGHT);
+    ctx.lineTo(e.layerX * 2, height * 2);
 
     ctx.moveTo(-1, e.layerY * 2);
-    ctx.lineTo(conf.DPI_WIDTH, e.layerY * 2);
+    ctx.lineTo(width * 2, e.layerY * 2);
 
     ctx.stroke();
     ctx.closePath();
   };
 
   const mouseout = () => {
-    ctx.clearRect(0, 0, conf.DPI_WIDTH, conf.DPI_HEIGHT);
+    ctx.clearRect(0, 0, width * 2, height * 2);
   };
 
   canvas.addEventListener("mousemove", mousemove);

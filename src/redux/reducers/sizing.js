@@ -1,9 +1,24 @@
-const sizingReducer = (state = 200, action) => {
+const sizingReducer = (
+  state = { size: { width: 350, height: 200 } },
+  action
+) => {
   switch (action.type) {
-    case "UP":
-      return state + 10;
-    case "DOWN":
-      return state - 10;
+    case "WIDTH_LESS":
+      return {
+        size: { width: (state.size.width -= 10), height: state.size.height },
+      };
+    case "WIDTH_MORE":
+      return {
+        size: { width: (state.size.width += 10), height: state.size.height },
+      };
+    case "HEIGHT_LESS":
+      return {
+        size: { width: state.size.width, height: (state.size.height -= 10) },
+      };
+    case "HEIGHT_MORE":
+      return {
+        size: { width: state.size.width, height: (state.size.height += 10) },
+      };
     default:
       return state;
   }
