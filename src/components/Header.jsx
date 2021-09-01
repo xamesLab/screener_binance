@@ -7,16 +7,27 @@ const Header = ({ setCount, countChart }) => {
     const dispatch = useDispatch()
     const chartsType = useSelector(state=>state.typeChart)
     
+    // TODO: вынести кнопки в отдельные компоненты, скрывать header, адаптивность
     return (
         <div className="header">
-            <button onClick={() => { dispatch(widthMore()) }}> W + </button>
-            <button onClick={()=>{dispatch(widthLess())}}> W - </button>
-            <button onClick={() => { dispatch(heightMore()) }}> H + </button>
-            <button onClick={()=>{dispatch(heightLess())}}> H - </button>
+            <div className="header__logo">
+                <p className="logo">ScreenLine</p>
+                <p className="logo__label">beta</p>
+            </div>
+            <div className="pass" style={{width:'10rem'}}></div>
+            <div className="header__resize">
+            <p className="header__label">sizing:</p>
+                <button className='header__resize_btn' onClick={() => { dispatch(widthMore()) }}> W + </button>
+                <button className='header__resize_btn' onClick={()=>{dispatch(widthLess())}}> W - </button>
+                <button className='header__resize_btn' onClick={() => { dispatch(heightMore()) }}> H + </button>
+                <button className='header__resize_btn' onClick={()=>{dispatch(heightLess())}}> H - </button>
+            </div>
             <div className="header__toggle_charts">
+            <p className="header__label">charts type:</p>
                 <button onClick={()=>{dispatch(setLine())}} className={`header__toggle_btn ${chartsType==='LINE'?'active':''}`}>line</button>
                 <button onClick={()=>{dispatch(setCandle())}} className={`header__toggle_btn ${chartsType==='CANDLE'?'active':''}`}>candles</button>
             </div>
+            <div className="header__count">
             <p className="header__label">count of chart:</p>
             <select value={countChart} onChange={(e) => {
                 setCount(e.target.value)
@@ -24,7 +35,7 @@ const Header = ({ setCount, countChart }) => {
                 <option value={3}>3</option>
                 <option value={6}>6</option>
                 <option value={9}>9</option>
-            </select>
+            </select></div>
         </div>
     ) 
 }

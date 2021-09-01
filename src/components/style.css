@@ -1,5 +1,5 @@
 .container {
-    width: 95vw;
+    width: 97vw;
     min-height: 100vh;
     background-color: aliceblue;
     display: flex;
@@ -11,16 +11,36 @@
 .header {
     width: 100%;
     height: 50px;
-    background-color: rgb(74, 0, 97);
+    background-color: rgba(74, 0, 97, 0.884);
     display: flex;
     align-items: center;
-    justify-content: flex-end;
+    justify-content: space-between;
     padding: 0 2rem;
     color: azure;
 }
 
+.header__logo {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.logo {
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-right: 0.3rem;
+}
+
+.logo__label {
+    color: rgb(238, 39, 25);
+}
+
 .header__toggle_charts {
-    margin-right: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-right: 5rem;
 }
 
 .header__toggle_btn {
@@ -52,9 +72,44 @@
     background-color: rgb(174, 0, 255);
 }
 
+.header__resize {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-right: 5rem;
+}
+
+.header__resize_btn {
+    border: none;
+    margin-right: 5px;
+    padding: 0.1rem 0.5rem;
+    cursor: pointer;
+    color: rgba(255, 255, 255, 0.76);
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
+.header__resize_btn:hover {
+    border: none;
+    padding: 0.2rem 0.5rem;
+    color: white;
+    background-color:rgba(255, 255, 255, 0.651);
+}
+
+.header__resize_btn:active {
+    color: white;
+    padding: 0.2rem 0.5rem;
+    background-color: rgb(174, 0, 255);
+}
+
 .header__label {
     font-size: 1.2rem;
     margin-right: 0.5rem;
+}
+
+.header__count {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .chart__load {
@@ -87,7 +142,7 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    padding: 2rem 0.5rem 1rem 0.5rem;
+    padding: 1rem 0.5rem;
 }
 
 .chart {
