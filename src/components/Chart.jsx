@@ -6,8 +6,9 @@ import ChartModal from "./ChartModal";
 import { getData } from "./getData";
 import Loading from '../UI/Loading'
 import CurrentPrice from "./CurrentPrice";
+import { useSelector } from "react-redux";
 
-const Chart = ({ socket, chartSet, chartsType, setSettings }) => {
+const Chart = ({ socket, chartSet, setSettings }) => {
     const [activeChartModal, setactiveChartModal] = useState(false)
     const [ctxArr, setCtxArr] = useState([])
     const [data, setData] = useState()
@@ -17,6 +18,8 @@ const Chart = ({ socket, chartSet, chartsType, setSettings }) => {
     const refY = useRef()
     const refX = useRef()
     const refOver = useRef()
+
+    const chartsType = useSelector(state=>state.typeChart)
 
     // инициализация канваса
     useEffect(() => {

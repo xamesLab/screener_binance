@@ -1,25 +1,18 @@
 import React from "react"
+import {useDispatch, useSelector} from 'react-redux'
+import { setLine, setCandle } from "../redux/actions"
 
-const Header = ({setCount, countChart, setChartsType, chartsType}) => {
+const Header = ({ setCount, countChart }) => {
     // переключение типа графика
-    const chartLine = () => {
-        if (chartsType === 'CANDLE') {
-            setChartsType('LINE')
-        }
-    }
-
-    const chartCandles = () => {
-        if (chartsType === 'LINE') {
-            setChartsType('CANDLE')
-        }
-    }
-
+    const dispatch = useDispatch()
+    const chartsType = useSelector(state=>state.typeChart)
+    
     return (
         <div className="header">
             <button> colors </button>
             <div className="header__toggle_charts">
-                <button onClick={chartLine} className={`header__toggle_btn ${chartsType==='LINE'?'active':''}`}>line</button>
-                <button onClick={chartCandles} className={`header__toggle_btn ${chartsType==='CANDLE'?'active':''}`}>candles</button>
+                <button onClick={()=>{dispatch(setLine())}} className={`header__toggle_btn ${chartsType==='LINE'?'active':''}`}>line</button>
+                <button onClick={()=>{dispatch(setCandle())}} className={`header__toggle_btn ${chartsType==='CANDLE'?'active':''}`}>candles</button>
             </div>
             <p className="header__label">count of chart:</p>
             <select value={countChart} onChange={(e) => {

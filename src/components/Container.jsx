@@ -3,14 +3,10 @@ import { useState } from "react"
 import Chart from "./Chart"
 import Header from "./Header"
 
-//'wss://fstream.binance.com/stream?streams=adausdt@kline_30m/btcusdt@kline_30m'
-//const socket = new WebSocket('wss://fstream.binance.com/ws/btcusdt@kline_30m')
-
 const Container = () => {
     const [chartSeting, setChartSeting] = useState([])
     const [settings, setSettings] = useState()
     const [countChart, setCountChart] = useState(3)
-    const [chartsType, setChartsType] = useState('CANDLE')
     const [socketData, setSocketData] = useState()
     const [wsString, setString] = useState()
     const [, setSocket] = useState()
@@ -33,7 +29,6 @@ const Container = () => {
                     if (prevS) prevS.close()
                     return socket
                 })
-
             }
             socket.onmessage = async function (event) {
                 let d = await JSON.parse(event.data)
@@ -70,10 +65,10 @@ const Container = () => {
 
     return (
         <div className="container">
-            <Header setCount={setCountChart} countChart={countChart} setChartsType={setChartsType} chartsType={chartsType} />
+            <Header setCount={setCountChart} countChart={countChart}/>
             <div className="content">
                 {chartSeting.map((v) =>
-                    <Chart socket={socketData} key={v.id} chartSet={v} chartsType={chartsType} setSettings={setSettings} />
+                    <Chart socket={socketData} key={v.id} chartSet={v} setSettings={setSettings} />
                 )}
             </div>
         </div>

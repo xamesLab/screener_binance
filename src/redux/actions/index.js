@@ -3,3 +3,15 @@ export const toggleColor = () => {
     type: "INVERT",
   };
 };
+
+export const setLine = () => {
+  return {
+    type: "SET_LINE",
+  };
+};
+
+export const setCandle = () => {
+  return {
+    type: "SET_CANDLE",
+  };
+};
