@@ -1,6 +1,6 @@
 import React from "react"
 import {useDispatch, useSelector} from 'react-redux'
-import { setLine, setCandle } from "../redux/actions"
+import { setLine, setCandle, sizeUP, sizeDOWN } from "../redux/actions"
 
 const Header = ({ setCount, countChart }) => {
     // переключение типа графика
@@ -9,7 +9,8 @@ const Header = ({ setCount, countChart }) => {
     
     return (
         <div className="header">
-            <button> colors </button>
+            <button onClick={() => { dispatch(sizeUP()) }}> sizing + </button>
+            <button onClick={()=>{dispatch(sizeDOWN())}}> sizing - </button>
             <div className="header__toggle_charts">
                 <button onClick={()=>{dispatch(setLine())}} className={`header__toggle_btn ${chartsType==='LINE'?'active':''}`}>line</button>
                 <button onClick={()=>{dispatch(setCandle())}} className={`header__toggle_btn ${chartsType==='CANDLE'?'active':''}`}>candles</button>

@@ -15,3 +15,15 @@ export const setCandle = () => {
     type: "SET_CANDLE",
   };
 };
+
+export const sizeUP = () => {
+  return {
+    type: "UP",
+  };
+};
+
+export const sizeDOWN = () => {
+  return {
+    type: "DOWN",
+  };
+};

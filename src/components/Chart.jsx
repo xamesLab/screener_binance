@@ -20,12 +20,13 @@ const Chart = ({ socket, chartSet, setSettings }) => {
     const refOver = useRef()
 
     const chartsType = useSelector(state=>state.typeChart)
+    const chartsHeigth = useSelector(state => state.sizing)
 
     // инициализация канваса
     useEffect(() => {
-        setCtxArr(canvasInit(ref.current, refY.current, refX.current))
+        setCtxArr(canvasInit(ref.current, refY.current, refX.current, chartsHeigth))
         drawOverlay(refOver.current)
-    }, [])
+    }, [chartsHeigth])
 
     //получение данных
     useEffect(() => {
@@ -62,7 +63,7 @@ const Chart = ({ socket, chartSet, setSettings }) => {
     useEffect(() => {
         if (data) {
             console.log('draw')
-            setChartProps(drawChart(ctxArr, data, chartsType))
+            setChartProps(drawChart(ctxArr, data, chartsType, chartsHeigth))
         }
     },[data, ctxArr, chartsType])
 

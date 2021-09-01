@@ -1,7 +1,9 @@
-const sizingReducer = (state = 0, action) => {
+const sizingReducer = (state = 200, action) => {
   switch (action.type) {
-    case "STATE":
-      return state + 1;
+    case "UP":
+      return state + 10;
+    case "DOWN":
+      return state - 10;
     default:
       return state;
   }
