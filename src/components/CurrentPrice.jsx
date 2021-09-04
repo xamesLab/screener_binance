@@ -11,7 +11,7 @@ export default function CurrentPrice({chartProps, stream }) {
     useEffect(() => {
         const { min, ratio } = chartProps;
         const getPosition = (price) => {
-            return ((price - min) * ratio + conf.PADDING) / 2
+            return Math.floor(((price - min) * ratio + conf.PADDING) / 2)
         };
 
         if (stream) {
@@ -56,11 +56,25 @@ export default function CurrentPrice({chartProps, stream }) {
                 bottom: `${currentPosition.l}px`
             }}></div>
             <div className="current_price__candle" style={style}></div>
-            <div className='current_price__priceLine' style={{
-                borderBottom: `1px solid ${stylePL?stylePL.backgroundColor:'#777'}`,
-                bottom: `${currentPosition.c}px`
-            }}></div>
             
+            {stylePL?<div className='current_price__priceLine' style={{
+                borderBottom: `1px solid ${stylePL.backgroundColor}`,
+                bottom: `${currentPosition.c}px`
+            }}></div>:<></>}
+
+            {stream?<div className='current_price__label' style={{
+                borderLeft: `3px solid ${stylePL?.backgroundColor}`,
+                //borderBottom: `2.5px solid ${stylePL?.backgroundColor}`,
+                bottom: `${currentPosition.c}px`,
+                width: '53px',
+                //backgroundColor: `${stylePL?.backgroundColor}`,
+                position: 'absolute',
+                right: '-53px',
+                transform: 'translateY(50%)',
+                color:`${stylePL?.backgroundColor}`,
+                //height: '20px',
+            }}>{ stream.k.c }</div>:<></>}
+           
         </div>
     )
 }

@@ -257,3 +257,17 @@ canvas {
     right: 10px
 }
 
+.current_price__label {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0 2px;
+    background-color: rgba(242, 230, 245, 0.952);
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+.current_price__label>p {
+    
+}
+
