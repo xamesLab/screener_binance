@@ -265,9 +265,9 @@ canvas {
     background-color: rgba(242, 230, 245, 0.952);
     font-size: 0.75rem;
     font-weight: 700;
-}
-
-.current_price__label>p {
-    
+    width: 53px;
+    position: absolute;
+    right: -53px;
+    transform: translateY(50%);
 }
 

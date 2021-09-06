@@ -5,7 +5,7 @@ import { conf } from './conf';
 export default function CurrentPrice({chartProps, stream }) {
     const [currentPosition, setCurrentPosition] = useState({})
     const [style, setStyle] = useState()
-    const [stylePL, setStylePL] = useState()
+    const [currentColor, setCurrentColor] = useState('#777')
 
     // конвертация цены в позицию на графике (в пикселях)
     useEffect(() => {
@@ -32,14 +32,14 @@ export default function CurrentPrice({chartProps, stream }) {
                 height: currentPosition.o-currentPosition.c,
                 bottom: currentPosition.c,
             })
-            setStylePL({backgroundColor:`${conf.colors.low}`})
+            setCurrentColor(`${conf.colors.low}`)
         } else if(currentPosition.c) {
             setStyle({
                 border: `1px solid ${conf.colors.high}`,
                 height: currentPosition.c - currentPosition.o,
                 bottom: currentPosition.o,
             })
-            setStylePL({backgroundColor:`${conf.colors.high}`})
+            setCurrentColor(`${conf.colors.high}`)
 } 
     }, [currentPosition])
     
@@ -57,22 +57,15 @@ export default function CurrentPrice({chartProps, stream }) {
             }}></div>
             <div className="current_price__candle" style={style}></div>
             
-            {stylePL?<div className='current_price__priceLine' style={{
-                borderBottom: `1px solid ${stylePL.backgroundColor}`,
+            <div className='current_price__priceLine' style={{
+                borderBottom: `1px solid ${currentColor}`,
                 bottom: `${currentPosition.c}px`
-            }}></div>:<></>}
+            }}></div>
 
             {stream?<div className='current_price__label' style={{
-                borderLeft: `3px solid ${stylePL?.backgroundColor}`,
-                //borderBottom: `2.5px solid ${stylePL?.backgroundColor}`,
+                borderLeft: `3px solid ${currentColor}`,
                 bottom: `${currentPosition.c}px`,
-                width: '53px',
-                //backgroundColor: `${stylePL?.backgroundColor}`,
-                position: 'absolute',
-                right: '-53px',
-                transform: 'translateY(50%)',
-                color:`${stylePL?.backgroundColor}`,
-                //height: '20px',
+                color:`${currentColor}`,
             }}>{ stream.k.c }</div>:<></>}
            
         </div>

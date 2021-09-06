@@ -145,11 +145,11 @@ const drawChartField = (ctx, { height, width }) => {
   const step = (height * 2 - 30) / conf.ROWS_COUNT;
 
   ctx.beginPath();
-  ctx.lineWidth = 1;
+  ctx.lineWidth = 0.5;
   ctx.strokeStyle = "#777";
   for (let i = 0; i <= conf.ROWS_COUNT; i++) {
-    const y = step * i;
-    ctx.moveTo(0, y + conf.PADDING + 0.5);
+    const y = Math.floor(step) * i;
+    ctx.moveTo(0, y + conf.PADDING);
     ctx.lineTo(width * 2, y + conf.PADDING);
   }
   ctx.stroke();
@@ -198,12 +198,12 @@ const drawCandles = (ctx, columns, colors, ratio, yMin, { width, height }) => {
     }
 
     // отрисовка тела
-    ctx.lineWidth = 9;
+    ctx.lineWidth = 8;
     _draw(yO, yC, i);
     ctx.stroke();
 
     // отрисовка тени
-    ctx.lineWidth = 3;
+    ctx.lineWidth = 2;
     _draw(yL, yH, i);
     ctx.stroke();
   }

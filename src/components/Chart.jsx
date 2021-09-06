@@ -57,7 +57,7 @@ const Chart = ({ socket, chartSet, setSettings }) => {
                 })
             };
         }
-    }, [socket, chartSet]);
+    }, [socket, chartSet,]);
 
     // отрисовка графика и получение его параметров
     useEffect(() => {
