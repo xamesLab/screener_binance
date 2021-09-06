@@ -192,9 +192,9 @@ const drawCandles = (ctx, columns, colors, ratio, yMin, { width, height }) => {
 
     // цвет свечи
     if (columns.open[i] > columns.close[i]) {
-      ctx.strokeStyle = colors.low;
+      ctx.strokeStyle = colors.bear;
     } else {
-      ctx.strokeStyle = colors.high;
+      ctx.strokeStyle = colors.bull;
     }
 
     // отрисовка тела
@@ -232,7 +232,8 @@ export const canvasInit = (canvas, canvasY, canvasX, size) => {
 // финальная отрисовка графика и возврат параметров графика
 export const drawChart = (
   ctxArray,
-  { columns, colors },
+  { columns },
+  colors,
   chartsType = "LINE",
   size
 ) => {
@@ -254,8 +255,8 @@ export const drawChart = (
 
   // линейный график
   if (chartsType === "LINE") {
-    drawLine(ctx, getCoord(columns.high, yRatio, yMin, size), colors.high);
-    drawLine(ctx, getCoord(columns.low, yRatio, yMin, size), colors.low);
+    drawLine(ctx, getCoord(columns.high, yRatio, yMin, size), colors.bull);
+    drawLine(ctx, getCoord(columns.low, yRatio, yMin, size), colors.bear);
   } else {
     // свечной график
     drawCandles(ctx, columns, colors, yRatio, yMin, size);

@@ -1,6 +1,6 @@
 import React from "react"
 import {useDispatch, useSelector} from 'react-redux'
-import { setLine, setCandle, widthMore, widthLess,heightMore, heightLess } from "../redux/actions"
+import { setLine, setCandle, widthMore, widthLess, heightMore, heightLess, colorsInv } from "../redux/actions"
 
 const Header = ({ setCount, countChart }) => {
     // переключение типа графика
@@ -14,7 +14,7 @@ const Header = ({ setCount, countChart }) => {
                 <p className="logo">ScreenLine</p>
                 <p className="logo__label">beta</p>
             </div>
-            <div className="pass" style={{width:'10rem'}}></div>
+            <div className="pass" style={{width:'10rem'}}><button onClick={()=>{dispatch(colorsInv())}}> invert </button></div>
             <div className="header__resize">
             <p className="header__label">sizing:</p>
                 <button className='header__resize_btn' onClick={() => { dispatch(widthMore()) }}> W + </button>

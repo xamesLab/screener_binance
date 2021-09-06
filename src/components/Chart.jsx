@@ -21,6 +21,7 @@ const Chart = ({ socket, chartSet, setSettings }) => {
 
     const chartsType = useSelector(state=>state.typeChart)
     const chartsSize = useSelector(state => state.sizing).size
+    const chartsColors = useSelector(state => state.mainColors)
 
     // инициализация канваса
     useEffect(() => {
@@ -63,10 +64,10 @@ const Chart = ({ socket, chartSet, setSettings }) => {
     useEffect(() => {
         if (data) {
             console.log('draw')
-            setChartProps(drawChart(ctxArr, data, chartsType, chartsSize))
+            setChartProps(drawChart(ctxArr, data, chartsColors, chartsType, chartsSize))
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    },[data, ctxArr, chartsType])
+    },[data, ctxArr, chartsType, chartsColors])
 
     return (
         <div className="chart">

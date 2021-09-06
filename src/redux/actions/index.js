@@ -39,3 +39,15 @@ export const heightLess = () => {
     type: "HEIGHT_LESS",
   };
 };
+
+export const colorsInv = () => {
+  return {
+    type: "INVERT",
+  };
+};
+
+export const colorsNorm = () => {
+  return {
+    type: "NORMAL",
+  };
+};
