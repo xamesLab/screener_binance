@@ -193,11 +193,29 @@ canvas {
 
 .chart__label {
     position: absolute;
-    padding: 2px 3px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    padding: 0 3px;
     top: 15px;
     left: 15px;
-    background-color: rgba(119, 119, 119, 0.281);
+    background-color: rgba(119, 119, 119);
+    color: black;
+    opacity: 40%;
     font-size: 0.8rem;
+    cursor: pointer;
+    z-index: 10;
+}
+
+.chart__label>img {
+    width: 1.03rem;
+    height: 1.03rem;
+    margin-left: 0.2rem;
+}
+
+.chart__label:hover {
+    color: white;
+    opacity: 100;
 }
 
 .chart__field_overlay {
