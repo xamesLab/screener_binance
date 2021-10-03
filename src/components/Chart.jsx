@@ -72,9 +72,9 @@ const Chart = ({ socket, chartSet, setSettings }) => {
     return (
         <div className="chart">
             {!data ? <div className="chart__load"><Loading /></div> : ''}
-            <a href={`https://www.binance.com/ru/futures/${chartSet.coin}USDT`}>
+            <a target='_blank' rel="noreferrer" href={`https://www.binance.com/ru/futures/${chartSet.coin}USDT`}>
                 <div className="chart__label">
-                    {chartSet.coin}/USDT {chartSet.tF}
+                    <p>{chartSet.coin}/USDT {chartSet.tF}</p>
                     <img src={"images/icons/link-to.png"} alt="link to chart" />
                 </div>
             </a>

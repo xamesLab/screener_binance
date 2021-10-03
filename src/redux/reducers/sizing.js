@@ -1,5 +1,5 @@
 const sizingReducer = (
-  state = { size: { width: 350, height: 200 } },
+  state = { size: { width: 350, height: 155 } },
   action
 ) => {
   switch (action.type) {
