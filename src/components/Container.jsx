@@ -6,7 +6,7 @@ import Header from "./Header"
 const Container = () => {
     const [chartSeting, setChartSeting] = useState([])
     const [settings, setSettings] = useState()
-    const [countChart, setCountChart] = useState(3)
+    const [countChart, setCountChart] = useState(6)
     const [socketData, setSocketData] = useState()
     const [wsString, setString] = useState()
     const [, setSocket] = useState()

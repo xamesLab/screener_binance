@@ -1,9 +1,12 @@
-const mainColorsReducer = (state = { bull: "green", bear: "red" }, action) => {
+const mainColorsReducer = (
+  state = { bull: "#098A00", bear: "#D50101" },
+  action
+) => {
   switch (action.type) {
-    case "NORMAL":
-      return state;
-    case "INVERT":
-      return { bull: "red", bear: "green" };
+    case "BEARCOLOR":
+      return { bull: state.bull, bear: action.hex };
+    case "BULLCOLOR":
+      return { bull: action.hex, bear: state.bear };
     default:
       return state;
   }

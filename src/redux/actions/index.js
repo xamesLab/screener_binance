@@ -40,14 +40,16 @@ export const heightLess = () => {
   };
 };
 
-export const colorsInv = () => {
+export const colorBull = (hex) => {
   return {
-    type: "INVERT",
+    type: "BULLCOLOR",
+    hex: hex,
   };
 };
 
-export const colorsNorm = () => {
+export const colorBear = (hex) => {
   return {
-    type: "NORMAL",
+    type: "BEARCOLOR",
+    hex: hex,
   };
 };

@@ -19,6 +19,43 @@
     color: azure;
 }
 
+.header__set_colors {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header__set_colors>label {
+    display: inline-block;
+    position: relative;
+    width: 150px;
+    height: 150px;
+    cursor: pointer;
+    overflow: hidden;
+  }
+
+input[type="color"] {
+    border: none;
+    background: white;
+    width: 20px;
+    height: 20px;
+    outline: none;
+    overflow: hidden;
+    border-radius: 50%;
+    cursor: inherit;
+}
+
+.input_circle {
+    position: absolute;
+    left: 30px;
+    top: 30px;
+    width: 90px;
+    height: 90px;
+    background-color: white;
+    border-radius: 50%;
+    cursor: inherit;
+  }
+
 .header__logo {
     display: flex;
     justify-content: space-between;
@@ -200,8 +237,7 @@ canvas {
     top: 15px;
     left: 15px;
     border: 1px solid;
-    color: black;
-    opacity: 40%;
+    color: rgba(0, 0, 0, 0.404);
     font-size: 0.8rem;
     cursor: pointer;
     z-index: 10;

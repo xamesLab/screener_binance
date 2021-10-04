@@ -1,11 +1,12 @@
 import React from "react"
 import {useDispatch, useSelector} from 'react-redux'
-import { setLine, setCandle, widthMore, widthLess, heightMore, heightLess, colorsInv } from "../redux/actions"
+import { setLine, setCandle, widthMore, widthLess, heightMore, heightLess, colorBull,colorBear } from "../redux/actions"
 
 const Header = ({ setCount, countChart }) => {
     // переключение типа графика
     const dispatch = useDispatch()
-    const chartsType = useSelector(state=>state.typeChart)
+    const chartsType = useSelector(state => state.typeChart)
+    const mainColors = useSelector(state => state.mainColors)
     
     // TODO: вынести кнопки в отдельные компоненты, скрывать header, адаптивность
     return (
@@ -14,7 +15,10 @@ const Header = ({ setCount, countChart }) => {
                 <p className="logo">ScreenLine</p>
                 <p className="logo__label">beta</p>
             </div>
-            <div className="pass" style={{width:'10rem'}}><button onClick={()=>{dispatch(colorsInv())}}> invert </button></div>
+            <div className='header__set_colors'>
+            <input type="color" name="bull" value={mainColors.bull} onChange={e=>dispatch(colorBull(e.target.value))}/>
+            <input type="color" name="bear" value={mainColors.bear} onChange={e=>dispatch(colorBear(e.target.value))}/>
+            </div>
             <div className="header__resize">
             <p className="header__label">sizing:</p>
                 <button className='header__resize_btn' onClick={() => { dispatch(widthMore()) }}> W + </button>
